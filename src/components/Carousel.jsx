@@ -22,6 +22,7 @@ export default function Carousel() {
             <img 
               src={`${IMAGE_BASE_URL}${item.poster_path}`}
               alt={item.title || item.name}
+              
             />
           </div>
         ))}
