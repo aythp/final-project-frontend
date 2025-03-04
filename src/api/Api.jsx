@@ -36,18 +36,23 @@ export async function getTopSeries() {
 export async function getCombinedMedia() {
     const movies = await getTopMovies();
     const series = await getTopSeries();
-  
+
     const combinedMedia = [];
     const maxLength = Math.max(movies.length, series.length);
-  
+
     for (let i = 0; i < maxLength; i++) {
-      if (movies[i]) {
-        combinedMedia.push({ ...movies[i], type: 'movie' });
-      }
-      if (series[i]) {
-        combinedMedia.push({ ...series[i], type: 'series' });
-      }
+        if (movies[i]) {
+            combinedMedia.push({ ...movies[i], type: 'movie' });
+        }
+        if (series[i]) {
+            combinedMedia.push({ ...series[i], type: 'series' });
+        }
     }
-  
+
+    for (let i = combinedMedia.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [combinedMedia[i], combinedMedia[j]] = [combinedMedia[j], combinedMedia[i]];
+    }
+
     return combinedMedia;
-  }
+}

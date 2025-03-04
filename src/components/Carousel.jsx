@@ -15,15 +15,13 @@ export default function Carousel() {
   }, []);
 
   return (
-    <div className="overflow-hidden relative w-full">
+    <div className="overflow-hidden relative w-full" style={{ height: 'calc(100vh - 4rem)' }}>
       <div className="flex animate-scroll">
         {media.map((item) => (
-          <div key={item.id} className="flex-shrink-0">
+          <div key={item.id} className="flex-shrink-0 ">
             <img 
               src={`${IMAGE_BASE_URL}${item.poster_path}`}
-              alt={item.title || item.name}
-              
-            />
+              alt={item.title || item.name}/>
           </div>
         ))}
       </div>
