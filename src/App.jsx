@@ -10,24 +10,11 @@ import Navbar from "./components/Navbar/Navbar";
 import IsPrivate from "./components/IsPrivate/IsPrivate";
 import IsAnon from "./components/IsAnon/IsAnon";
 
-function App() {
+export default function App() {
   return (
     <div className="App">
 
-<h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
-
-    <button className="btn">Button</button>
-<button className="btn btn-neutral">Neutral</button>
-<button className="btn btn-primary">Primary</button>
-<button className="btn btn-secondary">Secondary</button>
-<button className="btn btn-accent">Accent</button>
-<button className="btn btn-ghost">Ghost</button>
-<button className="btn btn-link">Link</button>
-
       <Navbar />
-
       <Routes>
         <Route path="/" element={<HomePage />} />
 
@@ -60,5 +47,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
