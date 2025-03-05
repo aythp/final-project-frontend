@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getCombinedMedia } from '../api/Api.jsx';
+import { getCombinedMedia } from '../api/api.jsx';
 
 export default function Carousel() {
   const [media, setMedia] = useState([]);
@@ -16,12 +16,14 @@ export default function Carousel() {
 
   return (
     <div className="overflow-hidden relative w-full" style={{ height: 'calc(100vh - 4rem)' }}>
-      <div className="flex animate-scroll">
-        {media.map((item) => (
-          <div key={item.id} className="flex-shrink-0 ">
-            <img 
+      <div className="flex animate-scroll w-max">
+        {[...media, ...media].map((item, index) => (
+          <div key={index} className="flex-shrink-0">
+            <img
               src={`${IMAGE_BASE_URL}${item.poster_path}`}
-              alt={item.title || item.name}/>
+              alt={item.title || item.name}
+              className="w-auto h-full"
+            />
           </div>
         ))}
       </div>

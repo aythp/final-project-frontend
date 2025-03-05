@@ -3,7 +3,7 @@ export const content = ["./src/**/*.{js,jsx,ts,tsx}"];
 export const theme = {
   extend: {
     animation: {
-      scroll: 'scroll 10s linear infinite',
+      scroll: 'scroll 120s linear infinite',
     },
     keyframes: {
       scroll: {

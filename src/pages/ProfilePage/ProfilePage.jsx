@@ -1,11 +1,11 @@
-import "./ProfilePage.css";
+import Navbar from "../../components/Navbar/Navbar"
+import Footer from "../../components/Footer"
 
-function ProfilePage() {
-  return (
-    <div>
-      <h1>Profile page</h1>
-    </div>
-  );
+export default function ProfilePage(){
+    return (
+        <>
+            <Navbar />
+            <Footer />
+        </>
+    )
 }
-
-export default ProfilePage;

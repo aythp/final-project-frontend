@@ -6,22 +6,19 @@ import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import SignupPage from "./pages/SignupPage/SignupPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 
-import Navbar from "./components/Navbar/Navbar";
 import IsPrivate from "./components/IsPrivate/IsPrivate";
 import IsAnon from "./components/IsAnon/IsAnon";
 
 export default function App() {
   return (
-    <div className="App">
-
-      <Navbar />
+    <>
       <Routes>
         <Route path="/" element={<HomePage />} />
 
         <Route
           path="/profile"
           element={
-            <IsPrivate>
+            <IsPrivate> {/* cambiar a isPrivate de nuevo!!!!!!!!!!!!!!!!!!! */}
               <ProfilePage />
             </IsPrivate>
           }
@@ -44,6 +41,6 @@ export default function App() {
           }
         />
       </Routes>
-    </div>
+    </>
   );
 }
