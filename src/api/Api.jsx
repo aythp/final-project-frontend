@@ -5,7 +5,7 @@ const BASE_URL = "https://api.themoviedb.org/3";
 
 export async function getTopMovies() {
   try {
-    const response = await axios.get(`${BASE_URL}/movie/top_rated`, {
+    const response = await axios.get(`${BASE_URL}trending/movie/week`, {
       params: {
         api_key: API_KEY,
       },
@@ -20,7 +20,7 @@ export async function getTopMovies() {
 
 export async function getTopSeries() {
   try {
-    const response = await axios.get(`${BASE_URL}/tv/top_rated`, {
+    const response = await axios.get(`${BASE_URL}/trending/tv/week`, {
       params: {
         api_key: API_KEY,
       },
