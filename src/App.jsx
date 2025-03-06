@@ -5,7 +5,7 @@ import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
-import Navbar from "./components/Navbar/Navbar";
+import Navbar from "./components/Navbar";
 import IsPrivate from "./components/IsPrivate/IsPrivate";
 import IsAnon from "./components/IsAnon/IsAnon";
 
