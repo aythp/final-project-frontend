@@ -1,9 +1,8 @@
-import "./LoginPage.css";
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/auth.context";
-import authService from "../../services/auth.service";
-import Carousel from '../../components/Carousel'
+import { AuthContext } from "../context/auth.context";
+import authService from "../services/auth.service";
+import Carousel from '../components/Carousel'
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
