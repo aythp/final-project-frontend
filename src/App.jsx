@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import Navbar from "./components/Navbar";
 import IsPrivate from "./components/IsPrivate/IsPrivate";
 import IsAnon from "./components/IsAnon/IsAnon";
+import UserSettingsPage from "./pages/UserSettingsPage";
 
 export default function App() {
   return (
@@ -26,6 +27,25 @@ export default function App() {
             </IsPrivate>
           }
         />
+        <Route path="/settings" element={
+          <IsPrivate>
+            <UserSettingsPage/>
+            </IsPrivate>}/>
+
+            <Route path="/likes" element={
+          <IsPrivate>
+            <UserSettingsPage/>
+            </IsPrivate>}/>   
+
+            <Route path="/viewed" element={
+          <IsPrivate>
+            <UserSettingsPage/>
+            </IsPrivate>}/>
+
+            <Route path="/pending" element={
+          <IsPrivate>
+            <UserSettingsPage/>
+            </IsPrivate>}/>
 
         <Route
           path="/signup"

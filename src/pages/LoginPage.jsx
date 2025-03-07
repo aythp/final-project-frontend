@@ -45,11 +45,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative w-full" style={{ height: 'calc(100vh - 4rem)' }}> {/* Misma altura que el Carousel */}
-      <Carousel /> {/* Carousel como fondo */}
-      <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div> {/* Capa de Glassmorphism */}
-      <div className="absolute inset-0 flex items-center justify-center"> {/* Centra el contenido */}
-        <div className="card w-full max-w-md bg-white/20 backdrop-blur-md rounded-xl shadow-xl"> {/* Aplica Glassmorphism al card */}
+    <div className="relative w-full" style={{ height: 'calc(100vh - 4rem)' }}>
+      <Carousel />
+      <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="card w-full max-w-md bg-white/20 backdrop-blur-md rounded-xl shadow-xl">
           <div className="card-body">
             <h1 className="card-title text-2xl font-bold mb-4">Login</h1>
             <form onSubmit={handleLoginSubmit} className="space-y-4">
