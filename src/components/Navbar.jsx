@@ -7,7 +7,7 @@ export default function Navbar() {
 
   return (
     <div className="navbar bg-base-100 shadow-lg">
-      <div className="flex-1">
+      <div className="flex-1 align-items-center">
         <Link to="/" className="btn btn-ghost normal-case text-xl ">
           Home
         </Link>

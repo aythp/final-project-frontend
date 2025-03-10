@@ -36,7 +36,7 @@ export default function MovieSearch(props) {
         }
       });
       console.log("Resultados de búsqueda de TMDB:", response.data.results);
-      setSuggestions(response.data.results.slice(0, 5));
+      setSuggestions(response.data.results.slice(0, 6)); // Mostrar hasta 6 resultados para 3x2
       setError(null);
     } catch (err) {
       console.error("Error buscando películas:", err);
@@ -79,7 +79,7 @@ export default function MovieSearch(props) {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-4">
+    <div className="w-full max-w-4xl mx-auto p-4">
       <div className="form-control">
         <input
           type="text"
@@ -104,33 +104,33 @@ export default function MovieSearch(props) {
         </div>
       )}
 
-      {suggestions.length > 0 && (
-        <div className="mt-4 space-y-4">
-          {suggestions.map((movie) => (
-            <div
-              key={movie.id}
-              className="card card-side bg-base-100 shadow-xl hover:bg-base-200 cursor-pointer transition duration-300 ease-in-out"
-              onClick={() => handleSaveMovie(movie)}
-            >
-              <figure className="w-24">
-                {movie.poster_path && (
-                  <img
-                    src={`${IMAGE_BASE_URL}${movie.poster_path}`}
-                    alt={movie.title}
-                    className="h-full object-cover"
-                  />
-                )}
-              </figure>
-              <div className="card-body p-4">
-                <h2 className="card-title text-sm">{movie.title}</h2>
-                <p className="text-xs text-gray-500">
-                  {new Date(movie.release_date).getFullYear()}
-                </p>
-              </div>
-            </div>
-          ))}
+{suggestions.length > 0 && (
+  <div className="mt-4 grid grid-cols-4 gap-4">
+    {suggestions.map((movie) => (
+      <div
+        key={movie.id}
+        className="card bg-base-100 shadow-xl hover:bg-base-200 cursor-pointer transition duration-300 ease-in-out"
+        onClick={() => handleSaveMovie(movie)}
+      >
+        <figure className="w-full h-48">
+          {movie.poster_path && (
+            <img
+              src={`${IMAGE_BASE_URL}${movie.poster_path}`}
+              alt={movie.title}
+              className="w-full h-48 object-cover"
+            />
+          )}
+        </figure>
+        <div className="card-body p-4">
+          <h2 className="card-title text-lg">{movie.title}</h2>
+          <p className="text-sm text-gray-500">
+            {new Date(movie.release_date).getFullYear()}
+          </p>
         </div>
-      )}
+      </div>
+    ))}
+  </div>
+)}
     </div>
   );
 }

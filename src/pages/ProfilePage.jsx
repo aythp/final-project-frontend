@@ -16,6 +16,32 @@ export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState('movies');
   const [isSearching, setIsSearching] = useState(false);
   const searchRef = useRef(null);
+  const [statusLoading, setStatusLoading] = useState({});
+
+  const handleStatusChange = async (itemId, itemType, newStatus) => {
+    try {
+      setStatusLoading(prev => ({ ...prev, [itemId]: true }));
+      const authToken = localStorage.getItem("authToken");
+
+      await axios.post(
+        "http://localhost:5005/api/status",
+        {
+          [itemType]: itemId,
+          status: newStatus
+        },
+        {
+          headers: { Authorization: `Bearer ${authToken}` }
+        }
+      );
+
+      fetchData();
+    } catch (error) {
+      console.error("Error al cambiar el estado:", error);
+      setError("Error al cambiar el estado");
+    } finally {
+      setStatusLoading(prev => ({ ...prev, [itemId]: false }));
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -59,7 +85,7 @@ export default function ProfilePage() {
       }
       return prevMovies;
     });
-    setIsSearching(false); // Cerrar el buscador después de añadir
+    setIsSearching(false);
   };
 
   const handleSeriesAdded = (newSeries) => {
@@ -71,7 +97,7 @@ export default function ProfilePage() {
       }
       return prevSeries;
     });
-    setIsSearching(false); // Cerrar el buscador después de añadir
+    setIsSearching(false);
   };
 
   const handleClickOutside = (event) => {
@@ -93,7 +119,7 @@ export default function ProfilePage() {
         <div className="flex flex-grow">
           <Sidebar />
           <div className="flex flex-col w-full p-6">
-            {/* Header with user name and feed link */}
+
             <div className="flex flex-col items-center mb-8">
               <h1 className="text-3xl font-bold text-white text-center">
                 Bienvenido, {user?.name}
@@ -103,7 +129,6 @@ export default function ProfilePage() {
               </Link>
             </div>
 
-            {/* Tabs and Add button */}
             <div className="flex flex-col items-center mb-6">
               <div className="tabs tabs-boxed">
                 <button
@@ -127,13 +152,10 @@ export default function ProfilePage() {
               </button>
             </div>
 
-            {/* Overlay and Search Components */}
             {isSearching && (
               <>
-                {/* Fondo con efecto glassmorphism */}
                 <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"></div>
 
-                {/* Contenedor del buscador centrado */}
                 <div className="fixed inset-0 flex items-center justify-center z-50">
                   <div ref={searchRef} className="card w-full max-w-md bg-white/20 backdrop-blur-md rounded-xl shadow-xl">
                     <div className="card-body">
@@ -148,7 +170,6 @@ export default function ProfilePage() {
               </>
             )}
 
-            {/* Loading and Error States */}
             {loading && (
               <div className="flex justify-center items-center h-32">
                 <span className="loading loading-spinner text-primary"></span>
@@ -164,18 +185,33 @@ export default function ProfilePage() {
               </div>
             )}
 
-            {/* Contenedor relativo para películas y series */}
             <div className="relative flex-grow">
-              {/* Movies Grid with Fade */}
+
               <div className={`transition-opacity duration-300 ${activeTab === 'movies' ? 'opacity-100' : 'opacity-0 pointer-events-none absolute top-0 left-0 w-full'}`}>
                 <div className="grid grid-cols-3 gap-6">
                   {movies.map((movie) => (
-                    <div key={movie._id} className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300 hover:scale-105">
+                    <div key={movie._id} className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
                       <figure className="px-4 pt-4">
                         <img src={movie.poster} alt={movie.title} className="rounded-xl h-64 w-full object-cover" />
                       </figure>
                       <div className="card-body">
-                        <h2 className="card-title">{movie.title}</h2>
+                        <div className="flex justify-between items-start">
+                          <h2 className="card-title">{movie.title}</h2>
+                          <div className="dropdown dropdown-end">
+                            <button className="btn btn-sm btn-circle" disabled={statusLoading[movie._id]}>
+                              {statusLoading[movie._id] ? (
+                                <span className="loading loading-spinner loading-sm"></span>
+                              ) : (
+                                "⋮"
+                              )}
+                            </button>
+                            <ul className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                              <li><button onClick={() => handleStatusChange(movie._id, 'movie', 'favorite')}>❤️ Favorito</button></li>
+                              <li><button onClick={() => handleStatusChange(movie._id, 'movie', 'pending')}>⏳ Pendiente</button></li>
+                              <li><button onClick={() => handleStatusChange(movie._id, 'movie', 'watched')}>👀 Visto</button></li>
+                            </ul>
+                          </div>
+                        </div>
                         <p className="text-sm text-gray-500">{movie.description}</p>
                         <div className="text-sm">
                           <p>⭐ {movie.rating}</p>
@@ -189,16 +225,31 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              {/* Series Grid with Fade */}
               <div className={`transition-opacity duration-300 ${activeTab === 'series' ? 'opacity-100' : 'opacity-0 pointer-events-none absolute top-0 left-0 w-full'}`}>
                 <div className="grid grid-cols-3 gap-6">
                   {series.map((series) => (
-                    <div key={series._id} className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300 hover:scale-105">
+                    <div key={series._id} className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
                       <figure className="px-4 pt-4">
                         <img src={series.poster} alt={series.title} className="rounded-xl h-64 w-full object-cover" />
                       </figure>
                       <div className="card-body">
-                        <h2 className="card-title">{series.title}</h2>
+                        <div className="flex justify-between items-start">
+                          <h2 className="card-title">{series.title}</h2>
+                          <div className="dropdown dropdown-end">
+                            <button className="btn btn-sm btn-circle" disabled={statusLoading[series._id]}>
+                              {statusLoading[series._id] ? (
+                                <span className="loading loading-spinner loading-sm"></span>
+                              ) : (
+                                "⋮"
+                              )}
+                            </button>
+                            <ul className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                              <li><button onClick={() => handleStatusChange(series._id, 'series', 'favorite')}>❤️ Favorito</button></li>
+                              <li><button onClick={() => handleStatusChange(series._id, 'series', 'pending')}>⏳ Pendiente</button></li>
+                              <li><button onClick={() => handleStatusChange(series._id, 'series', 'watched')}>👀 Visto</button></li>
+                            </ul>
+                          </div>
+                        </div>
                         <p className="text-sm text-gray-500">{series.description}</p>
                         <div className="text-sm">
                           <p>⭐ {series.rating}</p>
