@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function MovieSearch() {
+export default function MovieSearch(props) {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -27,6 +27,7 @@ export default function MovieSearch() {
 
     try {
       setLoading(true);
+      console.log("Buscando películas en TMDB:", searchQuery);
       const response = await axios.get(`https://api.themoviedb.org/3/search/movie`, {
         params: {
           api_key: API_KEY,
@@ -34,9 +35,11 @@ export default function MovieSearch() {
           language: "es-ES",
         }
       });
+      console.log("Resultados de búsqueda de TMDB:", response.data.results);
       setSuggestions(response.data.results.slice(0, 5));
       setError(null);
     } catch (err) {
+      console.error("Error buscando películas:", err);
       setError('Error al buscar películas');
       setSuggestions([]);
     } finally {
@@ -52,16 +55,25 @@ export default function MovieSearch() {
   const handleSaveMovie = async (movie) => {
     try {
       const authToken = localStorage.getItem("authToken");
-      await axios.post(
+      console.log("Guardando película en el backend:", movie.title);
+      const response = await axios.post(
         "http://localhost:5005/api/movies/search",
         { query: movie.title },
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
+
+      console.log("Respuesta del backend al guardar la película:", response.data);
+
+      if (response.data && props.onMovieAdded) {
+        console.log("Actualizando estado en ProfilePage con la nueva película:", response.data);
+        props.onMovieAdded(response.data);
+      }
+
       setSuggestions([]);
       setQuery('');
-      setSuccessMessage('Película añadida correctamente');
-      setTimeout(() => setSuccessMessage(null), 3000);
+      setSuccessMessage('Película guardada correctamente');
     } catch (err) {
+      console.error("Error al guardar la película:", err);
       setError('Error al guardar la película');
     }
   };
@@ -79,7 +91,7 @@ export default function MovieSearch() {
       </div>
 
       {loading && <div className="mt-4 text-center">Cargando...</div>}
-      
+
       {error && (
         <div className="alert alert-error mt-4">
           <span>{error}</span>

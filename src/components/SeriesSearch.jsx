@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function SeriesSearch() {
+export default function SeriesSearch(props) {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -58,12 +58,13 @@ export default function SeriesSearch() {
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
 
-      if (response.data) {
-        setSuggestions([]);
-        setQuery('');
-        setSuccessMessage('Serie añadida correctamente');
-        setTimeout(() => setSuccessMessage(null), 3000);
+      if (response.data && props.onSeriesAdded) {
+        props.onSeriesAdded(response.data);
       }
+
+      setSuggestions([]);
+      setQuery('');
+      alert('Serie guardada correctamente');
     } catch (err) {
       setError('Error al guardar la serie');
     }
@@ -82,7 +83,7 @@ export default function SeriesSearch() {
       </div>
 
       {loading && <div className="mt-4 text-center">Cargando...</div>}
-      
+
       {error && (
         <div className="alert alert-error mt-4">
           <span>{error}</span>
