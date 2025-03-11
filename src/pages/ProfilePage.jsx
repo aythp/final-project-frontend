@@ -33,18 +33,20 @@ export default function ProfilePage() {
       setStatusLoading(prev => ({ ...prev, [itemId]: true }));
       const authToken = localStorage.getItem("authToken");
 
-      await axios.put(
-        `http://localhost:5005/api/${itemType}s/${itemId}/status`,
+      const endpoint = itemType === 'series' ? 'series' : `${itemType}s`;
+      
+      const response = await axios.put(
+        `http://localhost:5005/api/${endpoint}/${itemId}/status`,
         { status: newStatus },
         {
           headers: { Authorization: `Bearer ${authToken}` }
         }
       );
 
+      console.log(`Estado de ${itemType} actualizado:`, response.data);
       fetchData();
     } catch (error) {
-      console.error("Error al cambiar el estado:", error);
-      setError("Error al cambiar el estado");
+      console.log(`Error al cambiar el estado de ${itemType}:`, error);
     } finally {
       setStatusLoading(prev => ({ ...prev, [itemId]: false }));
     }
@@ -56,8 +58,8 @@ export default function ProfilePage() {
       totalSeries: series.length,
       favoriteMovies: movies.filter(m => m.status === 'favorite').length,
       favoriteSeries: series.filter(s => s.status === 'favorite').length,
-      watchedMovies: movies.filter(m => m.status === 'watched').length,
-      watchedSeries: series.filter(s => s.status === 'watched').length,
+      watchedMovies: movies.filter(m => m.status === 'viewed').length,
+      watchedSeries: series.filter(s => s.status === 'viewed').length,
       pendingMovies: movies.filter(m => m.status === 'pending').length,
       pendingSeries: series.filter(s => s.status === 'pending').length
     };
@@ -272,7 +274,7 @@ export default function ProfilePage() {
                               <ul className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
                                 <li><button onClick={() => handleStatusChange(movie._id, 'movie', 'favorite')}>❤️ Favorito</button></li>
                                 <li><button onClick={() => handleStatusChange(movie._id, 'movie', 'pending')}>⏳ Pendiente</button></li>
-                                <li><button onClick={() => handleStatusChange(movie._id, 'movie', 'watched')}>👀 Visto</button></li>
+                                <li><button onClick={() => handleStatusChange(movie._id, 'movie', 'viewed')}>👀 Visto</button></li>
                               </ul>
                             </div>
                           </div>
@@ -286,7 +288,7 @@ export default function ProfilePage() {
                           {movie.status && (
                             <div className="mt-2">
                               {movie.status === 'favorite' && <span className="badge badge-primary">❤️ Favorito</span>}
-                              {movie.status === 'watched' && <span className="badge badge-secondary">👀 Visto</span>}
+                              {movie.status === 'viewed' && <span className="badge badge-secondary">👀 Visto</span>}
                               {movie.status === 'pending' && <span className="badge badge-accent">⏳ Pendiente</span>}
                             </div>
                           )}
@@ -331,7 +333,7 @@ export default function ProfilePage() {
                               <ul className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
                                 <li><button onClick={() => handleStatusChange(series._id, 'series', 'favorite')}>❤️ Favorito</button></li>
                                 <li><button onClick={() => handleStatusChange(series._id, 'series', 'pending')}>⏳ Pendiente</button></li>
-                                <li><button onClick={() => handleStatusChange(series._id, 'series', 'watched')}>👀 Visto</button></li>
+                                <li><button onClick={() => handleStatusChange(series._id, 'series', 'viewed')}>👀 Visto</button></li>
                               </ul>
                             </div>
                           </div>
@@ -344,7 +346,7 @@ export default function ProfilePage() {
                           {series.status && (
                             <div className="mt-2">
                               {series.status === 'favorite' && <span className="badge badge-primary">❤️ Favorito</span>}
-                              {series.status === 'watched' && <span className="badge badge-secondary">👀 Visto</span>}
+                              {series.status === 'viewed' && <span className="badge badge-secondary">👀 Visto</span>}
                               {series.status === 'pending' && <span className="badge badge-accent">⏳ Pendiente</span>}
                             </div>
                           )}
