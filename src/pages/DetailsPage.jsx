@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import { BsBookmarkFill, BsBookmark } from 'react-icons/bs';
@@ -30,7 +31,6 @@ export default function DetailsPage() {
           throw new Error("No se encontró el token de autenticación");
         }
 
-        // Intentar obtener como película
         try {
           const movieResponse = await axios.get(`http://localhost:5005/api/movies/${id}`, {
             headers: { Authorization: `Bearer ${authToken}` }
@@ -41,7 +41,7 @@ export default function DetailsPage() {
           setComment(movieResponse.data.comment || '');
         } catch (movieError) {
           console.log("Not a movie, trying series...");
-          // Si no es una película, intentar como serie
+
           const seriesResponse = await axios.get(`http://localhost:5005/api/series/${id}`, {
             headers: { Authorization: `Bearer ${authToken}` }
           });
@@ -110,7 +110,8 @@ export default function DetailsPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col min-h-screen bg-slate-600">
+      <div className="min-h-screen bg-slate-600">
+        <Navbar />
         <div className="flex flex-grow">
           <Sidebar />
           <div className="flex-1 p-6 flex justify-center items-center">
@@ -125,7 +126,8 @@ export default function DetailsPage() {
 
   if (error || !media) {
     return (
-      <div className="flex flex-col min-h-screen bg-slate-600">
+      <div className="min-h-screen bg-slate-600">
+        <Navbar />
         <div className="flex flex-grow">
           <Sidebar />
           <div className="flex-1 p-6">
@@ -146,22 +148,22 @@ export default function DetailsPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-600">
+    <div className="min-h-screen bg-slate-600 relative">
+      {/* Backdrop con overlay */}
+      {media.backdrop && (
+        <div 
+          className="fixed inset-0 bg-cover bg-center -z-10"
+          style={{ 
+            backgroundImage: `url(${media.backdrop})`,
+            filter: 'brightness(0.3)'
+          }}
+        />
+      )}
+
       <div className="flex flex-grow">
         <Sidebar />
         <div className="flex-1 p-6">
-          {/* Backdrop con overlay */}
-          {media.backdrop && (
-            <div 
-              className="fixed top-0 left-0 right-0 h-[400px] bg-cover bg-center"
-              style={{ 
-                backgroundImage: `url(${media.backdrop})`,
-                filter: 'brightness(0.3)'
-              }}
-            />
-          )}
-
-          <div className="relative z-10">
+          <div className="relative">
             <div className="flex flex-col md:flex-row gap-8">
               {/* Póster y botones de estado */}
               <div className="w-full md:w-1/3">
@@ -233,10 +235,6 @@ export default function DetailsPage() {
 
                   {/* Sección de comentarios */}
                   <div className="mt-8">
-                    <div className="flex items-center gap-2 mb-4">
-                      <FaRegCommentDots className="text-2xl" />
-                      <h3 className="text-xl font-bold">Tu comentario</h3>
-                    </div>
                     
                     {isEditingComment ? (
                       <form onSubmit={handleCommentSubmit} className="space-y-4">

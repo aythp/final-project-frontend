@@ -21,6 +21,8 @@ export default function ProfilePage() {
   const [isSearching, setIsSearching] = useState(false);
   const searchRef = useRef(null);
   const [statusLoading, setStatusLoading] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
   
   const [stats, setStats] = useState({
     totalMovies: 0,
@@ -173,6 +175,19 @@ export default function ProfilePage() {
     }
   };
 
+  // Función para obtener los elementos de la página actual
+  const getCurrentItems = (items) => {
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    return items.slice(indexOfFirstItem, indexOfLastItem);
+  };
+
+  // Función para cambiar de página
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo(0, 0);
+  };
+
   return (
     <>
       <div className="flex flex-col min-h-screen bg-slate-600">
@@ -281,75 +296,91 @@ export default function ProfilePage() {
                     <p>No has añadido ninguna película todavía.</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    {movies.map((movie) => (
-                      <div 
-                        key={movie._id} 
-                        className={`relative group cursor-pointer transition-all duration-300 rounded-lg overflow-hidden h-[500px]
-                          ${movie.status === 'favorite' ? 'hover:shadow-[0_0_15px_rgba(255,0,0,0.7)]' : ''}
-                          ${movie.status === 'viewed' ? 'hover:shadow-[0_0_15px_rgba(0,255,0,0.7)]' : ''}
-                          ${movie.status === 'pending' ? 'hover:shadow-[0_0_15px_rgba(255,255,0,0.7)]' : ''}
-                          ${!movie.status ? 'hover:shadow-[0_0_15px_rgba(255,255,255,0.7)]' : ''}
-                        `}
-                        onClick={() => navigate(`/movies/${movie._id}`)}
-                      >
-                        <img 
-                          src={movie.poster} 
-                          alt={movie.title}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = '/default-poster.png';
-                          }}
-                        />
-                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex flex-col justify-between p-4">
-                          <div className="flex justify-between items-start">
-                            <h2 className="text-white text-xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              {movie.title}
-                            </h2>
-                            <button 
-                              className="text-white text-2xl hover:scale-110 transition-transform opacity-0 group-hover:opacity-100"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDelete(movie._id, 'movie');
-                              }}
-                            >
-                              <RiDeleteBin6Line className="text-red-500 hover:text-red-700" />
-                            </button>
-                          </div>
-                          <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <button 
-                              className="text-white text-2xl hover:scale-110 transition-transform"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleStatusChange(movie._id, 'movie', movie.status === 'favorite' ? null : 'favorite');
-                              }}
-                            >
-                              {movie.status === 'favorite' ? <AiFillHeart className="text-red-500" /> : <AiOutlineHeart />}
-                            </button>
-                            <button 
-                              className="text-white text-2xl hover:scale-110 transition-transform"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleStatusChange(movie._id, 'movie', movie.status === 'viewed' ? null : 'viewed');
-                              }}
-                            >
-                              {movie.status === 'viewed' ? <MdVisibility className="text-green-500" /> : <MdVisibilityOff />}
-                            </button>
-                            <button 
-                              className="text-white text-2xl hover:scale-110 transition-transform"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleStatusChange(movie._id, 'movie', movie.status === 'pending' ? null : 'pending');
-                              }}
-                            >
-                              {movie.status === 'pending' ? <BsBookmarkFill className="text-yellow-500" /> : <BsBookmark />}
-                            </button>
+                  <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                      {getCurrentItems(movies).map((movie) => (
+                        <div 
+                          key={movie._id} 
+                          className={`relative group cursor-pointer transition-all duration-300 rounded-lg overflow-hidden h-[500px]
+                            ${movie.status === 'favorite' ? 'hover:shadow-[0_0_15px_rgba(255,0,0,0.7)]' : ''}
+                            ${movie.status === 'viewed' ? 'hover:shadow-[0_0_15px_rgba(0,255,0,0.7)]' : ''}
+                            ${movie.status === 'pending' ? 'hover:shadow-[0_0_15px_rgba(255,255,0,0.7)]' : ''}
+                            ${!movie.status ? 'hover:shadow-[0_0_15px_rgba(255,255,255,0.7)]' : ''}
+                          `}
+                          onClick={() => navigate(`/movies/${movie._id}`)}
+                        >
+                          <img 
+                            src={movie.poster} 
+                            alt={movie.title}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = '/default-poster.png';
+                            }}
+                          />
+                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex flex-col justify-between p-4">
+                            <div className="flex justify-between items-start">
+                              <h2 className="text-white text-xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                {movie.title}
+                              </h2>
+                              <button 
+                                className="text-white text-2xl hover:scale-110 transition-transform opacity-0 group-hover:opacity-100"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDelete(movie._id, 'movie');
+                                }}
+                              >
+                                <RiDeleteBin6Line className="text-red-500 hover:text-red-700" />
+                              </button>
+                            </div>
+                            <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              <button 
+                                className="text-white text-2xl hover:scale-110 transition-transform"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleStatusChange(movie._id, 'movie', movie.status === 'favorite' ? null : 'favorite');
+                                }}
+                              >
+                                {movie.status === 'favorite' ? <AiFillHeart className="text-red-500" /> : <AiOutlineHeart />}
+                              </button>
+                              <button 
+                                className="text-white text-2xl hover:scale-110 transition-transform"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleStatusChange(movie._id, 'movie', movie.status === 'viewed' ? null : 'viewed');
+                                }}
+                              >
+                                {movie.status === 'viewed' ? <MdVisibility className="text-green-500" /> : <MdVisibilityOff />}
+                              </button>
+                              <button 
+                                className="text-white text-2xl hover:scale-110 transition-transform"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleStatusChange(movie._id, 'movie', movie.status === 'pending' ? null : 'pending');
+                                }}
+                              >
+                                {movie.status === 'pending' ? <BsBookmarkFill className="text-yellow-500" /> : <BsBookmark />}
+                              </button>
+                            </div>
                           </div>
                         </div>
+                      ))}
+                    </div>
+                    {/* Paginación para películas */}
+                    <div className="flex justify-center mt-8">
+                      <div className="join">
+                        {Array.from({ length: Math.ceil(movies.length / itemsPerPage) }, (_, i) => (
+                          <button
+                            key={i + 1}
+                            className={`join-item btn ${currentPage === i + 1 ? 'btn-active' : ''}`}
+                            onClick={() => handlePageChange(i + 1)}
+                          >
+                            {i + 1}
+                          </button>
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  </>
                 )}
               </div>
 
@@ -359,75 +390,91 @@ export default function ProfilePage() {
                     <p>No has añadido ninguna serie todavía.</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    {series.map((series) => (
-                      <div 
-                        key={series._id} 
-                        className={`relative group cursor-pointer transition-all duration-300 rounded-lg overflow-hidden h-[500px]
-                          ${series.status === 'favorite' ? 'hover:shadow-[0_0_15px_rgba(255,0,0,0.7)]' : ''}
-                          ${series.status === 'viewed' ? 'hover:shadow-[0_0_15px_rgba(0,255,0,0.7)]' : ''}
-                          ${series.status === 'pending' ? 'hover:shadow-[0_0_15px_rgba(255,255,0,0.7)]' : ''}
-                          ${!series.status ? 'hover:shadow-[0_0_15px_rgba(255,255,255,0.7)]' : ''}
-                        `}
-                        onClick={() => navigate(`/series/${series._id}`)}
-                      >
-                        <img 
-                          src={series.poster} 
-                          alt={series.title}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = '/default-poster.png';
-                          }}
-                        />
-                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex flex-col justify-between p-4">
-                          <div className="flex justify-between items-start">
-                            <h2 className="text-white text-xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              {series.title}
-                            </h2>
-                            <button 
-                              className="text-white text-2xl hover:scale-110 transition-transform opacity-0 group-hover:opacity-100"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDelete(series._id, 'series');
-                              }}
-                            >
-                              <RiDeleteBin6Line className="text-red-500 hover:text-red-700" />
-                            </button>
-                          </div>
-                          <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <button 
-                              className="text-white text-2xl hover:scale-110 transition-transform"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleStatusChange(series._id, 'series', series.status === 'favorite' ? null : 'favorite');
-                              }}
-                            >
-                              {series.status === 'favorite' ? <AiFillHeart className="text-red-500" /> : <AiOutlineHeart />}
-                            </button>
-                            <button 
-                              className="text-white text-2xl hover:scale-110 transition-transform"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleStatusChange(series._id, 'series', series.status === 'viewed' ? null : 'viewed');
-                              }}
-                            >
-                              {series.status === 'viewed' ? <MdVisibility className="text-green-500" /> : <MdVisibilityOff />}
-                            </button>
-                            <button 
-                              className="text-white text-2xl hover:scale-110 transition-transform"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleStatusChange(series._id, 'series', series.status === 'pending' ? null : 'pending');
-                              }}
-                            >
-                              {series.status === 'pending' ? <BsBookmarkFill className="text-yellow-500" /> : <BsBookmark />}
-                            </button>
+                  <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                      {getCurrentItems(series).map((series) => (
+                        <div 
+                          key={series._id} 
+                          className={`relative group cursor-pointer transition-all duration-300 rounded-lg overflow-hidden h-[500px]
+                            ${series.status === 'favorite' ? 'hover:shadow-[0_0_15px_rgba(255,0,0,0.7)]' : ''}
+                            ${series.status === 'viewed' ? 'hover:shadow-[0_0_15px_rgba(0,255,0,0.7)]' : ''}
+                            ${series.status === 'pending' ? 'hover:shadow-[0_0_15px_rgba(255,255,0,0.7)]' : ''}
+                            ${!series.status ? 'hover:shadow-[0_0_15px_rgba(255,255,255,0.7)]' : ''}
+                          `}
+                          onClick={() => navigate(`/series/${series._id}`)}
+                        >
+                          <img 
+                            src={series.poster} 
+                            alt={series.title}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = '/default-poster.png';
+                            }}
+                          />
+                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex flex-col justify-between p-4">
+                            <div className="flex justify-between items-start">
+                              <h2 className="text-white text-xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                {series.title}
+                              </h2>
+                              <button 
+                                className="text-white text-2xl hover:scale-110 transition-transform opacity-0 group-hover:opacity-100"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDelete(series._id, 'series');
+                                }}
+                              >
+                                <RiDeleteBin6Line className="text-red-500 hover:text-red-700" />
+                              </button>
+                            </div>
+                            <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              <button 
+                                className="text-white text-2xl hover:scale-110 transition-transform"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleStatusChange(series._id, 'series', series.status === 'favorite' ? null : 'favorite');
+                                }}
+                              >
+                                {series.status === 'favorite' ? <AiFillHeart className="text-red-500" /> : <AiOutlineHeart />}
+                              </button>
+                              <button 
+                                className="text-white text-2xl hover:scale-110 transition-transform"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleStatusChange(series._id, 'series', series.status === 'viewed' ? null : 'viewed');
+                                }}
+                              >
+                                {series.status === 'viewed' ? <MdVisibility className="text-green-500" /> : <MdVisibilityOff />}
+                              </button>
+                              <button 
+                                className="text-white text-2xl hover:scale-110 transition-transform"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleStatusChange(series._id, 'series', series.status === 'pending' ? null : 'pending');
+                                }}
+                              >
+                                {series.status === 'pending' ? <BsBookmarkFill className="text-yellow-500" /> : <BsBookmark />}
+                              </button>
+                            </div>
                           </div>
                         </div>
+                      ))}
+                    </div>
+                    {/* Paginación para series */}
+                    <div className="flex justify-center mt-8">
+                      <div className="join">
+                        {Array.from({ length: Math.ceil(series.length / itemsPerPage) }, (_, i) => (
+                          <button
+                            key={i + 1}
+                            className={`join-item btn ${currentPage === i + 1 ? 'btn-active' : ''}`}
+                            onClick={() => handlePageChange(i + 1)}
+                          >
+                            {i + 1}
+                          </button>
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
