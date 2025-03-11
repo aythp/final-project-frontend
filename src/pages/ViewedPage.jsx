@@ -27,8 +27,8 @@ export default function ViewedPage() {
                     })
                 ]);
 
-                const viewedMovies = moviesResponse.data.filter(movie => movie.status === 'viewed');
-                const viewedSeries = seriesResponse.data.filter(series => series.status === 'viewed');
+                const viewedMovies = moviesResponse.data.filter(movie => movie.status === 'watched');
+                const viewedSeries = seriesResponse.data.filter(series => series.status === 'watched');
 
                 const allViewedMedia = [...viewedMovies, ...viewedSeries]
                     .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));

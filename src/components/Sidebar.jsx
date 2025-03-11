@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaHeart, FaClock, FaEye, FaCog, FaFilm, FaTv } from 'react-icons/fa';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,6 +10,15 @@ const Sidebar = () => {
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
+
+  const menuItems = [
+    { icon: <FaHeart className="w-5 h-5" />, text: 'Favoritos', path: '/likes' },
+    { icon: <FaClock className="w-5 h-5" />, text: 'Pendientes', path: '/pending' },
+    { icon: <FaEye className="w-5 h-5" />, text: 'Vistos', path: '/viewed' },
+    { icon: <FaFilm className="w-5 h-5" />, text: 'Top Películas', path: '/top-movies' },
+    { icon: <FaTv className="w-5 h-5" />, text: 'Top Series', path: '/top-series' },
+    { icon: <FaCog className="w-5 h-5" />, text: 'Ajustes', path: '/settings' }
+  ];
 
   return (
     <div className="fixed top-0 left-0 h-full flex items-center z-50">
@@ -36,30 +46,20 @@ const Sidebar = () => {
           }`}
         >
           <ul className="space-y-4">
-            <li
-              className="px-6 py-3 bg-base-100 rounded-lg text-base-content cursor-pointer hover:bg-base-300 hover:text-primary transition-colors duration-300"
-              onClick={() => navigate('/likes')}
-            >
-              {isHovered ? 'Likes' : '❤️'}
-            </li>
-            <li
-              className="px-6 py-3 bg-base-100 rounded-lg text-base-content cursor-pointer hover:bg-base-300 hover:text-primary transition-colors duration-300"
-              onClick={() => navigate('/pending')}
-            >
-              {isHovered ? 'Pending' : '⏳'}
-            </li>
-            <li
-              className="px-6 py-3 bg-base-100 rounded-lg text-base-content cursor-pointer hover:bg-base-300 hover:text-primary transition-colors duration-300"
-              onClick={() => navigate('/viewed')}
-            >
-              {isHovered ? 'Viewed' : '👀'}
-            </li>
-            <li
-              className="px-6 py-3 bg-base-100 rounded-lg text-base-content cursor-pointer hover:bg-base-300 hover:text-primary transition-colors duration-300"
-              onClick={() => navigate('/settings')}
-            >
-              {isHovered ? 'User Settings' : '⚙️'}
-            </li>
+            {menuItems.map((item, index) => (
+              <li
+                key={index}
+                className="flex items-center px-4 py-3 bg-base-100 rounded-lg text-base-content cursor-pointer hover:bg-base-300 hover:text-primary transition-colors duration-300"
+                onClick={() => navigate(item.path)}
+              >
+                <div className="flex items-center w-full">
+                  <span className="flex-shrink-0">{item.icon}</span>
+                  <span className={`ml-3 whitespace-nowrap ${isHovered ? 'opacity-100' : 'opacity-0 w-0'} transition-all duration-300`}>
+                    {item.text}
+                  </span>
+                </div>
+              </li>
+            ))}
           </ul>
         </nav>
       </div>
