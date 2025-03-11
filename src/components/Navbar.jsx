@@ -8,26 +8,43 @@ export default function Navbar() {
 
   return (
     <div className="navbar bg-base-100 shadow-lg">
-      <div className="flex-1">
+      <div className="navbar-start w-1/4">
         <Link to="/" className="btn btn-ghost normal-case text-xl">
           Home
         </Link>
-        
+      </div>
+      
+      <div className="navbar-center w-2/4 flex justify-center gap-4">
         {isLoggedIn && (
-          <div className="flex ml-4 space-x-4">
-            <Link to="/top-movies" className="btn btn-ghost btn-sm normal-case">
-              <FaFilm className="mr-2" />
-              Top Películas
-            </Link>
-            <Link to="/top-series" className="btn btn-ghost btn-sm normal-case">
-              <FaTv className="mr-2" />
-              Top Series
-            </Link>
-          </div>
+          <>
+            <div className="dropdown dropdown-hover">
+              <label tabIndex={0} className="btn btn-ghost m-1">
+                <FaFilm className="mr-2" />
+                Top Películas
+              </label>
+              <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                <li><Link to="/top-movies/week">Esta Semana</Link></li>
+                <li><Link to="/top-movies/year">Este Año</Link></li>
+                <li><Link to="/top-movies/all">De la Historia</Link></li>
+              </ul>
+            </div>
+
+            <div className="dropdown dropdown-hover">
+              <label tabIndex={0} className="btn btn-ghost m-1">
+                <FaTv className="mr-2" />
+                Top Series
+              </label>
+              <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                <li><Link to="/top-series/week">Esta Semana</Link></li>
+                <li><Link to="/top-series/year">Este Año</Link></li>
+                <li><Link to="/top-series/all">De la Historia</Link></li>
+              </ul>
+            </div>
+          </>
         )}
       </div>
 
-      <div className="flex-none gap-2">
+      <div className="navbar-end w-1/4">
         {isLoggedIn && (
           <>
             <div className="dropdown dropdown-end">
@@ -56,7 +73,7 @@ export default function Navbar() {
                 </li>
               </ul>
             </div>
-            <span className="text-base-content">{user && user.name}</span>
+            <span className="text-base-content ml-2">{user && user.name}</span>
           </>
         )}
 

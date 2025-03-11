@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaHeart, FaClock, FaEye, FaCog, FaFilm, FaTv } from 'react-icons/fa';
+import { FaHeart, FaClock, FaEye, FaCog } from 'react-icons/fa';
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,8 +15,6 @@ const Sidebar = () => {
     { icon: <FaHeart className="w-5 h-5" />, text: 'Favoritos', path: '/likes' },
     { icon: <FaClock className="w-5 h-5" />, text: 'Pendientes', path: '/pending' },
     { icon: <FaEye className="w-5 h-5" />, text: 'Vistos', path: '/viewed' },
-    { icon: <FaFilm className="w-5 h-5" />, text: 'Top Películas', path: '/top-movies' },
-    { icon: <FaTv className="w-5 h-5" />, text: 'Top Series', path: '/top-series' },
     { icon: <FaCog className="w-5 h-5" />, text: 'Ajustes', path: '/settings' }
   ];
 
