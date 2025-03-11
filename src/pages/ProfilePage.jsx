@@ -1,11 +1,15 @@
 import { useEffect, useState, useContext, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from "../context/auth.context";
 import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
 import MovieSearch from '../components/MovieSearch';
 import SeriesSearch from '../components/SeriesSearch';
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
+import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
+import { BsBookmarkFill, BsBookmark } from 'react-icons/bs';
+import { RiDeleteBin6Line } from 'react-icons/ri';
 
 export default function ProfilePage() {
   const { user } = useContext(AuthContext);
@@ -17,6 +21,7 @@ export default function ProfilePage() {
   const [isSearching, setIsSearching] = useState(false);
   const searchRef = useRef(null);
   const [statusLoading, setStatusLoading] = useState({});
+  
   const [stats, setStats] = useState({
     totalMovies: 0,
     totalSeries: 0,
@@ -27,6 +32,7 @@ export default function ProfilePage() {
     pendingMovies: 0,
     pendingSeries: 0
   });
+  const navigate = useNavigate();
 
   const handleStatusChange = async (itemId, itemType, newStatus) => {
     try {
@@ -138,6 +144,35 @@ export default function ProfilePage() {
     };
   }, []);
 
+  const handleDelete = async (itemId, itemType) => {
+    if (window.confirm('¿Estás seguro de que quieres eliminar este contenido?')) {
+      try {
+        const authToken = localStorage.getItem("authToken");
+        const endpoint = itemType === 'series' ? 'series' : `${itemType}s`;
+        
+        await axios.delete(`http://localhost:5005/api/${endpoint}/${itemId}`, {
+          headers: { Authorization: `Bearer ${authToken}` }
+        });
+
+        // Actualizar el estado local
+        if (itemType === 'movie') {
+          setMovies(prevMovies => prevMovies.filter(movie => movie._id !== itemId));
+        } else {
+          setSeries(prevSeries => prevSeries.filter(series => series._id !== itemId));
+        }
+
+        // Recalcular estadísticas
+        calculateStats(
+          itemType === 'movie' ? movies.filter(m => m._id !== itemId) : movies,
+          itemType === 'series' ? series.filter(s => s._id !== itemId) : series
+        );
+
+      } catch (error) {
+        console.log(`Error al eliminar el contenido:`, error);
+      }
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col min-h-screen bg-slate-600">
@@ -246,52 +281,71 @@ export default function ProfilePage() {
                     <p>No has añadido ninguna película todavía.</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                     {movies.map((movie) => (
-                      <div key={movie._id} className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
-                        <figure className="px-4 pt-4">
-                          <img 
-                            src={movie.poster} 
-                            alt={movie.title} 
-                            className="rounded-xl h-64 w-full object-cover"
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = '/default-poster.png';
-                            }}
-                          />
-                        </figure>
-                        <div className="card-body">
+                      <div 
+                        key={movie._id} 
+                        className={`relative group cursor-pointer transition-all duration-300 rounded-lg overflow-hidden h-[500px]
+                          ${movie.status === 'favorite' ? 'hover:shadow-[0_0_15px_rgba(255,0,0,0.7)]' : ''}
+                          ${movie.status === 'viewed' ? 'hover:shadow-[0_0_15px_rgba(0,255,0,0.7)]' : ''}
+                          ${movie.status === 'pending' ? 'hover:shadow-[0_0_15px_rgba(255,255,0,0.7)]' : ''}
+                          ${!movie.status ? 'hover:shadow-[0_0_15px_rgba(255,255,255,0.7)]' : ''}
+                        `}
+                        onClick={() => navigate(`/movies/${movie._id}`)}
+                      >
+                        <img 
+                          src={movie.poster} 
+                          alt={movie.title}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = '/default-poster.png';
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex flex-col justify-between p-4">
                           <div className="flex justify-between items-start">
-                            <h2 className="card-title">{movie.title}</h2>
-                            <div className="dropdown dropdown-end">
-                              <button className="btn btn-sm btn-circle" disabled={statusLoading[movie._id]}>
-                                {statusLoading[movie._id] ? (
-                                  <span className="loading loading-spinner loading-sm"></span>
-                                ) : (
-                                  "⋮"
-                                )}
-                              </button>
-                              <ul className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-                                <li><button onClick={() => handleStatusChange(movie._id, 'movie', 'favorite')}>❤️ Favorito</button></li>
-                                <li><button onClick={() => handleStatusChange(movie._id, 'movie', 'pending')}>⏳ Pendiente</button></li>
-                                <li><button onClick={() => handleStatusChange(movie._id, 'movie', 'viewed')}>👀 Visto</button></li>
-                              </ul>
-                            </div>
+                            <h2 className="text-white text-xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              {movie.title}
+                            </h2>
+                            <button 
+                              className="text-white text-2xl hover:scale-110 transition-transform opacity-0 group-hover:opacity-100"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDelete(movie._id, 'movie');
+                              }}
+                            >
+                              <RiDeleteBin6Line className="text-red-500 hover:text-red-700" />
+                            </button>
                           </div>
-                          <p className="text-sm text-gray-500">{movie.description}</p>
-                          <div className="text-sm">
-                            <p>⭐ {movie.rating}</p>
-                            <p>⏱️ {movie.runtime} minutos</p>
-                            <p>🎬 {movie.director}</p>
-                            <p>🎭 {(movie.cast || []).join(", ")}</p>
+                          <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <button 
+                              className="text-white text-2xl hover:scale-110 transition-transform"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleStatusChange(movie._id, 'movie', movie.status === 'favorite' ? null : 'favorite');
+                              }}
+                            >
+                              {movie.status === 'favorite' ? <AiFillHeart className="text-red-500" /> : <AiOutlineHeart />}
+                            </button>
+                            <button 
+                              className="text-white text-2xl hover:scale-110 transition-transform"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleStatusChange(movie._id, 'movie', movie.status === 'viewed' ? null : 'viewed');
+                              }}
+                            >
+                              {movie.status === 'viewed' ? <MdVisibility className="text-green-500" /> : <MdVisibilityOff />}
+                            </button>
+                            <button 
+                              className="text-white text-2xl hover:scale-110 transition-transform"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleStatusChange(movie._id, 'movie', movie.status === 'pending' ? null : 'pending');
+                              }}
+                            >
+                              {movie.status === 'pending' ? <BsBookmarkFill className="text-yellow-500" /> : <BsBookmark />}
+                            </button>
                           </div>
-                          {movie.status && (
-                            <div className="mt-2">
-                              {movie.status === 'favorite' && <span className="badge badge-primary">❤️ Favorito</span>}
-                              {movie.status === 'viewed' && <span className="badge badge-secondary">👀 Visto</span>}
-                              {movie.status === 'pending' && <span className="badge badge-accent">⏳ Pendiente</span>}
-                            </div>
-                          )}
                         </div>
                       </div>
                     ))}
@@ -305,51 +359,71 @@ export default function ProfilePage() {
                     <p>No has añadido ninguna serie todavía.</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                     {series.map((series) => (
-                      <div key={series._id} className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
-                        <figure className="px-4 pt-4">
-                          <img 
-                            src={series.poster} 
-                            alt={series.title} 
-                            className="rounded-xl h-64 w-full object-cover"
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = '/default-poster.png';
-                            }}
-                          />
-                        </figure>
-                        <div className="card-body">
+                      <div 
+                        key={series._id} 
+                        className={`relative group cursor-pointer transition-all duration-300 rounded-lg overflow-hidden h-[500px]
+                          ${series.status === 'favorite' ? 'hover:shadow-[0_0_15px_rgba(255,0,0,0.7)]' : ''}
+                          ${series.status === 'viewed' ? 'hover:shadow-[0_0_15px_rgba(0,255,0,0.7)]' : ''}
+                          ${series.status === 'pending' ? 'hover:shadow-[0_0_15px_rgba(255,255,0,0.7)]' : ''}
+                          ${!series.status ? 'hover:shadow-[0_0_15px_rgba(255,255,255,0.7)]' : ''}
+                        `}
+                        onClick={() => navigate(`/series/${series._id}`)}
+                      >
+                        <img 
+                          src={series.poster} 
+                          alt={series.title}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = '/default-poster.png';
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex flex-col justify-between p-4">
                           <div className="flex justify-between items-start">
-                            <h2 className="card-title">{series.title}</h2>
-                            <div className="dropdown dropdown-end">
-                              <button className="btn btn-sm btn-circle" disabled={statusLoading[series._id]}>
-                                {statusLoading[series._id] ? (
-                                  <span className="loading loading-spinner loading-sm"></span>
-                                ) : (
-                                  "⋮"
-                                )}
-                              </button>
-                              <ul className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-                                <li><button onClick={() => handleStatusChange(series._id, 'series', 'favorite')}>❤️ Favorito</button></li>
-                                <li><button onClick={() => handleStatusChange(series._id, 'series', 'pending')}>⏳ Pendiente</button></li>
-                                <li><button onClick={() => handleStatusChange(series._id, 'series', 'viewed')}>👀 Visto</button></li>
-                              </ul>
-                            </div>
+                            <h2 className="text-white text-xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              {series.title}
+                            </h2>
+                            <button 
+                              className="text-white text-2xl hover:scale-110 transition-transform opacity-0 group-hover:opacity-100"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDelete(series._id, 'series');
+                              }}
+                            >
+                              <RiDeleteBin6Line className="text-red-500 hover:text-red-700" />
+                            </button>
                           </div>
-                          <p className="text-sm text-gray-500">{series.description}</p>
-                          <div className="text-sm">
-                            <p>⭐ {series.rating}</p>
-                            <p>📺 {series.seasons} temporadas</p>
-                            <p>🎭 {(series.cast || []).join(", ")}</p>
+                          <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <button 
+                              className="text-white text-2xl hover:scale-110 transition-transform"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleStatusChange(series._id, 'series', series.status === 'favorite' ? null : 'favorite');
+                              }}
+                            >
+                              {series.status === 'favorite' ? <AiFillHeart className="text-red-500" /> : <AiOutlineHeart />}
+                            </button>
+                            <button 
+                              className="text-white text-2xl hover:scale-110 transition-transform"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleStatusChange(series._id, 'series', series.status === 'viewed' ? null : 'viewed');
+                              }}
+                            >
+                              {series.status === 'viewed' ? <MdVisibility className="text-green-500" /> : <MdVisibilityOff />}
+                            </button>
+                            <button 
+                              className="text-white text-2xl hover:scale-110 transition-transform"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleStatusChange(series._id, 'series', series.status === 'pending' ? null : 'pending');
+                              }}
+                            >
+                              {series.status === 'pending' ? <BsBookmarkFill className="text-yellow-500" /> : <BsBookmark />}
+                            </button>
                           </div>
-                          {series.status && (
-                            <div className="mt-2">
-                              {series.status === 'favorite' && <span className="badge badge-primary">❤️ Favorito</span>}
-                              {series.status === 'viewed' && <span className="badge badge-secondary">👀 Visto</span>}
-                              {series.status === 'pending' && <span className="badge badge-accent">⏳ Pendiente</span>}
-                            </div>
-                          )}
                         </div>
                       </div>
                     ))}
