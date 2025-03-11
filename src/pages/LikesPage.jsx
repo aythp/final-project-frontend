@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
@@ -76,7 +77,11 @@ export default function LikesPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {media.map((item) => (
-                            <div key={item._id} className="card bg-base-100 shadow-xl">
+                            <Link 
+                                key={item._id} 
+                                to={`/${item.runtime ? 'movies' : 'series'}/${item._id}`}
+                                className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300"
+                            >
                                 <figure className="px-4 pt-4">
                                     <img 
                                         src={item.poster} 
@@ -103,7 +108,7 @@ export default function LikesPage() {
                                         )}
                                     </div>
                                 </div>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                 </div>
