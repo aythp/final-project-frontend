@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 
@@ -18,15 +19,16 @@ export default function FeedPage() {
           throw new Error("No authentication token found");
         }
 
-        const response = await axios.get("http://localhost:5005/api/feed", {
+        const response = await axios.get("http://localhost:5005/api/users/feed", {
           headers: { Authorization: `Bearer ${authToken}` }
         });
         
         setMedia(response.data);
-        setLoading(false);
+        setError(null);
       } catch (err) {
         console.error("Error fetching feed:", err);
         setError('Error al cargar el feed');
+      } finally {
         setLoading(false);
       }
     };
@@ -39,7 +41,7 @@ export default function FeedPage() {
       <div className="flex flex-grow">
         <Sidebar />
         <div className="flex-1 p-6">
-          <h1 className="text-3xl font-bold text-white mb-8">Feed Global</h1>
+          <h1 className="text-3xl font-bold text-white mb-8">Feed Social</h1>
 
           {loading && (
             <div className="flex justify-center items-center">
@@ -54,34 +56,67 @@ export default function FeedPage() {
             </div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {!loading && media.length === 0 && (
+            <div className="text-center text-white">
+              <p>No hay actividad reciente. ¡Sigue a más usuarios para ver su contenido!</p>
+              <Link to="/users/search" className="btn btn-primary mt-4">
+                Buscar Usuarios
+              </Link>
+            </div>
+          )}
+
+          <div className="space-y-6">
             {media.map((item) => (
               <div key={item._id} className="card bg-base-100 shadow-xl">
-                <figure className="px-4 pt-4">
-                  <img 
-                    src={item.poster} 
-                    alt={item.title} 
-                    className="rounded-xl h-64 w-full object-cover"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = '/default-poster.png';
-                    }}
-                  />
-                </figure>
                 <div className="card-body">
-                  <h2 className="card-title">{item.title}</h2>
-                  <p className="text-sm text-gray-600">
-                    Compartido por: {item.user?.name || 'Usuario'}
-                  </p>
-                  <p className="text-sm text-gray-500">{item.description}</p>
-                  <div className="text-sm">
-                    <p>⭐ {item.rating}</p>
-                    {item.runtime ? (
-                      <p>⏱️ {item.runtime} minutos</p>
-                    ) : (
-                      <p>📺 {item.seasons} temporadas</p>
-                    )}
-                    {item.cast && <p>🎭 {item.cast.join(", ")}</p>}
+                  <div className="flex items-center mb-4">
+                    <Link
+                      to={`/users/${item.user._id}`}
+                      className="font-bold text-blue-600 hover:text-blue-800"
+                    >
+                      {item.user.name}
+                    </Link>
+                    <span className="mx-2">•</span>
+                    <span className="text-gray-500 text-sm">
+                      {new Date(item.updatedAt).toLocaleDateString()}
+                    </span>
+                  </div>
+
+                  <div className="flex gap-6">
+                    <img
+                      src={item.poster}
+                      alt={item.title}
+                      className="w-32 h-48 object-cover rounded-lg"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = '/default-poster.png';
+                      }}
+                    />
+                    <div>
+                      <h2 className="card-title">{item.title}</h2>
+                      <p className="text-sm text-gray-500 mb-2">{item.description}</p>
+                      <div className="flex items-center gap-4 text-sm">
+                        <span>⭐ {item.rating}</span>
+                        {item.runtime ? (
+                          <span>⏱️ {item.runtime} minutos</span>
+                        ) : (
+                          <span>📺 {item.seasons} temporadas</span>
+                        )}
+                      </div>
+                      <div className="mt-4">
+                        {item.status === 'favorite' && (
+                          <span className="badge badge-primary">❤️ Marcado como favorito</span>
+                        )}
+                        {item.status === 'viewed' && (
+                          <span className="badge badge-secondary">👁️ Marcado como visto</span>
+                        )}
+                      </div>
+                      {item.comment && (
+                        <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                          <p className="text-sm italic">"{item.comment}"</p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

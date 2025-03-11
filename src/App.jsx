@@ -22,7 +22,7 @@ export default function App() {
         <Route
           path="/profile"
           element={
-            <IsPrivate> {/* cambiar a isPrivate de nuevo!!!!!!!!!!!!!!!!!!! */}
+            <IsPrivate>
               <ProfilePage />
             </IsPrivate>
           }
