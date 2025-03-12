@@ -15,7 +15,6 @@ export default function Navbar() {
       </div>
       
       <div className="navbar-center w-2/4 flex justify-center gap-4">
-        {isLoggedIn && (
           <>
             <div className="dropdown dropdown-hover">
               <label tabIndex={0} className="btn btn-ghost m-1">
@@ -41,7 +40,6 @@ export default function Navbar() {
                 </ul>
               </div>
             </>
-          )}
         </div>
 
         <div className="navbar-end w-1/4">

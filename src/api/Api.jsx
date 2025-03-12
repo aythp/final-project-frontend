@@ -3,6 +3,31 @@ import axios from "axios";
 const API_KEY = "4c2b98d248efaa8035b951b8303b65e7";
 const BASE_URL = "https://api.themoviedb.org/3";
 
+export async function getTrending(mediaType, timeWindow) {
+  try {
+    let endpoint;
+    if (timeWindow === 'week') {
+      endpoint = `/trending/${mediaType}/week`;
+    } else if (timeWindow === 'year') {
+      endpoint = `/${mediaType}/popular`;
+    } else {
+      endpoint = `/${mediaType}/top_rated`;
+    }
+
+    const response = await axios.get(`${BASE_URL}${endpoint}`, {
+      params: {
+        api_key: API_KEY,
+        language: 'es-ES'
+      }
+    });
+
+    return response.data.results || [];
+  } catch (error) {
+    console.error("Error al obtener contenido de TMDB:", error.response?.data || error.message);
+    return [];
+  }
+}
+
 export async function getTopMovies() {
   try {
     const response = await axios.get(`${BASE_URL}/movie/top_rated`, {
