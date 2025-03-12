@@ -20,7 +20,7 @@ export async function getTopMovies() {
 
 export async function getTopSeries() {
   try {
-    const response = await axios.get(`${BASE_URL}/trending/tv/day`, {
+    const response = await axios.get(`${BASE_URL}/tv/top_rated`, {
       params: {
         api_key: API_KEY,
       },
@@ -56,3 +56,6 @@ export async function getCombinedMedia() {
 
     return combinedMedia;
 }
+
+
+
