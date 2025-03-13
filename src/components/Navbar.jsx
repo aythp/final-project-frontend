@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
-import { FaFilm, FaTv, FaHeart, FaClock, FaEye, FaCog } from 'react-icons/fa';
+import { FaFilm, FaTv, FaHeart, FaClock, FaEye, FaCog, FaUser } from 'react-icons/fa';
 
 export default function Navbar() {
   const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
@@ -77,35 +77,27 @@ export default function Navbar() {
 
       <div className="navbar-end w-1/4">
         {isLoggedIn && (
-          <>
-            <div className="dropdown dropdown-end">
-              <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full">
-                  <img 
-                    src={user.profileImage || "https://picsum.photos/id/402/200/300"} 
-                    alt="profile" 
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
-                </div>
-              </label>
-              <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
-                <li>
-                  <Link to="/profile" className="justify-between">
-                    Mi Perfil
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/settings">
-                    Ajustes
-                  </Link>
-                </li>
-                <li>
-                  <button onClick={logOutUser}>Cerrar Sesión</button>
-                </li>
-              </ul>
-            </div>
-            <span className="text-base-content ml-2">{user && user.name}</span>
-          </>
+          <div className="dropdown dropdown-end">
+            <label tabIndex={0} className="flex items-center gap-2 cursor-pointer">
+              <FaUser className="text-xl" />
+              <span className="text-base-content">{user?.name}</span>
+            </label>
+            <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
+              <li>
+                <Link to="/profile" className="justify-between">
+                  Mi Perfil
+                </Link>
+              </li>
+              <li>
+                <Link to="/settings">
+                  Ajustes
+                </Link>
+              </li>
+              <li>
+                <button onClick={logOutUser}>Cerrar Sesión</button>
+              </li>
+            </ul>
+          </div>
         )}
 
         {!isLoggedIn && (

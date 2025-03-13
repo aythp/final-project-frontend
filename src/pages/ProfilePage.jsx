@@ -193,9 +193,20 @@ export default function ProfilePage() {
         <div className="flex flex-grow">
           <div className="flex flex-col w-full p-6">
             <div className="flex flex-col items-center mb-8">
-              <h1 className="text-3xl font-bold text-white text-center mb-4">
-                Perfil de {user?.name}
-              </h1>
+              <div className="flex flex-col items-center gap-4 mb-4">
+                <div className="avatar">
+                  <div className="w-32 rounded-full">
+                    <img 
+                      src={user?.profileImage || "https://picsum.photos/id/402/200/300"} 
+                      alt="profile" 
+                      className="w-32 h-32 rounded-full object-cover"
+                    />
+                  </div>
+                </div>
+                <h1 className="text-4xl font-bold text-white text-center">
+                  {user?.name}
+                </h1>
+              </div>
               
               {/* Estadísticas */}
               <div className="stats shadow bg-base-200 mb-6">
