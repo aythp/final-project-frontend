@@ -5,8 +5,6 @@ export default function MovieSearch(props) {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
 
   const API_KEY = "4c2b98d248efaa8035b951b8303b65e7";
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
@@ -27,7 +25,6 @@ export default function MovieSearch(props) {
 
     try {
       setLoading(true);
-      console.log("Buscando películas en TMDB:", searchQuery);
       const response = await axios.get(`https://api.themoviedb.org/3/search/movie`, {
         params: {
           api_key: API_KEY,
@@ -35,12 +32,9 @@ export default function MovieSearch(props) {
           language: "es-ES",
         }
       });
-      console.log("Resultados de búsqueda de TMDB:", response.data.results);
-      setSuggestions(response.data.results.slice(0, 6)); // Mostrar hasta 6 resultados para 3x2
-      setError(null);
+      setSuggestions(response.data.results.slice(0, 4));
     } catch (err) {
       console.error("Error buscando películas:", err);
-      setError('Error al buscar películas');
       setSuggestions([]);
     } finally {
       setLoading(false);
@@ -55,31 +49,29 @@ export default function MovieSearch(props) {
   const handleSaveMovie = async (movie) => {
     try {
       const authToken = localStorage.getItem("authToken");
-      console.log("Guardando película en el backend:", movie.title);
+      
       const response = await axios.post(
         "http://localhost:5005/api/movies/search",
-        { query: movie.title },
+        { 
+          query: movie.title,
+          tmdbId: movie.id 
+        },
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
 
-      console.log("Respuesta del backend al guardar la película:", response.data);
-
       if (response.data && props.onMovieAdded) {
-        console.log("Actualizando estado en ProfilePage con la nueva película:", response.data);
         props.onMovieAdded(response.data);
       }
 
       setSuggestions([]);
       setQuery('');
-      setSuccessMessage('Película guardada correctamente');
     } catch (err) {
       console.error("Error al guardar la película:", err);
-      setError('Error al guardar la película');
     }
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4">
+    <div className="w-full max-w-full mx-auto p-4">
       <div className="form-control">
         <input
           type="text"
@@ -90,47 +82,43 @@ export default function MovieSearch(props) {
         />
       </div>
 
-      {loading && <div className="mt-4 text-center">Cargando...</div>}
-
-      {error && (
-        <div className="alert alert-error mt-4">
-          <span>{error}</span>
+      {loading && (
+        <div className="mt-4 flex justify-center">
+          <span className="loading loading-spinner text-primary"></span>
         </div>
       )}
 
-      {successMessage && (
-        <div className="alert alert-success mt-4">
-          <span>{successMessage}</span>
+      {suggestions.length > 0 && (
+        <div className="mt-4 grid grid-cols-4 gap-3">
+          {suggestions.map((movie) => (
+            <div
+              key={movie.id}
+              className="card bg-base-100 shadow-xl hover:shadow-2xl hover:scale-105 cursor-pointer transition-all duration-300 ease-in-out overflow-hidden h-[350px]"
+              onClick={() => handleSaveMovie(movie)}
+            >
+              <figure className="relative aspect-[2/3] w-full">
+                {movie.poster_path ? (
+                  <img
+                    src={`${IMAGE_BASE_URL}${movie.poster_path}`}
+                    alt={movie.title}
+                    className="w-full h-full object-contain bg-black"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-800 text-white">
+                    No hay poster
+                  </div>
+                )}
+              </figure>
+              <div className="card-body p-3 bg-gradient-to-t from-black to-transparent absolute bottom-0 w-full text-white">
+                <h2 className="card-title text-lg font-bold truncate">{movie.title}</h2>
+                <p className="text-sm">
+                  {movie.release_date ? new Date(movie.release_date).getFullYear() : 'Año desconocido'}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
       )}
-
-{suggestions.length > 0 && (
-  <div className="mt-4 grid grid-cols-4 gap-4">
-    {suggestions.map((movie) => (
-      <div
-        key={movie.id}
-        className="card bg-base-100 shadow-xl hover:bg-base-200 cursor-pointer transition duration-300 ease-in-out"
-        onClick={() => handleSaveMovie(movie)}
-      >
-        <figure className="w-full h-48">
-          {movie.poster_path && (
-            <img
-              src={`${IMAGE_BASE_URL}${movie.poster_path}`}
-              alt={movie.title}
-              className="w-full h-48 object-cover"
-            />
-          )}
-        </figure>
-        <div className="card-body p-4">
-          <h2 className="card-title text-lg">{movie.title}</h2>
-          <p className="text-sm text-gray-500">
-            {new Date(movie.release_date).getFullYear()}
-          </p>
-        </div>
-      </div>
-    ))}
-  </div>
-)}
     </div>
   );
 }

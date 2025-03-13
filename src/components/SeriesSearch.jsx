@@ -5,8 +5,6 @@ export default function SeriesSearch(props) {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
 
   const API_KEY = "4c2b98d248efaa8035b951b8303b65e7";
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
@@ -34,10 +32,9 @@ export default function SeriesSearch(props) {
           language: "es-ES",
         }
       });
-      setSuggestions(response.data.results.slice(0, 5));
-      setError(null);
+      setSuggestions(response.data.results.slice(0, 4));
     } catch (err) {
-      setError('Error al buscar series');
+      console.error("Error buscando series:", err);
       setSuggestions([]);
     } finally {
       setLoading(false);
@@ -54,7 +51,10 @@ export default function SeriesSearch(props) {
       const authToken = localStorage.getItem("authToken");
       const response = await axios.post(
         "http://localhost:5005/api/series/search",
-        { query: series.name },
+        { 
+          query: series.name,
+          tmdbId: series.id
+        },
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
 
@@ -64,14 +64,13 @@ export default function SeriesSearch(props) {
 
       setSuggestions([]);
       setQuery('');
-      alert('Serie guardada correctamente');
     } catch (err) {
-      setError('Error al guardar la serie');
+      console.error("Error al guardar la serie:", err);
     }
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-4">
+    <div className="w-full max-w-full mx-auto p-4">
       <div className="form-control">
         <input
           type="text"
@@ -82,41 +81,37 @@ export default function SeriesSearch(props) {
         />
       </div>
 
-      {loading && <div className="mt-4 text-center">Cargando...</div>}
-
-      {error && (
-        <div className="alert alert-error mt-4">
-          <span>{error}</span>
-        </div>
-      )}
-
-      {successMessage && (
-        <div className="alert alert-success mt-4">
-          <span>{successMessage}</span>
+      {loading && (
+        <div className="mt-4 flex justify-center">
+          <span className="loading loading-spinner text-primary"></span>
         </div>
       )}
 
       {suggestions.length > 0 && (
-        <div className="mt-4 space-y-4">
+        <div className="mt-4 grid grid-cols-4 gap-3">
           {suggestions.map((series) => (
             <div
               key={series.id}
-              className="card card-side bg-base-100 shadow-xl hover:bg-base-200 cursor-pointer transition duration-300 ease-in-out"
+              className="card bg-base-100 shadow-xl hover:shadow-2xl hover:scale-105 cursor-pointer transition-all duration-300 ease-in-out overflow-hidden h-[350px]"
               onClick={() => handleSaveSeries(series)}
             >
-              <figure className="w-24">
-                {series.poster_path && (
+              <figure className="relative aspect-[2/3] w-full">
+                {series.poster_path ? (
                   <img
                     src={`${IMAGE_BASE_URL}${series.poster_path}`}
                     alt={series.name}
-                    className="h-full object-cover"
+                    className="w-full h-full object-contain bg-black"
                   />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-800 text-white">
+                    No hay poster
+                  </div>
                 )}
               </figure>
-              <div className="card-body p-4">
-                <h2 className="card-title text-sm">{series.name}</h2>
-                <p className="text-xs text-gray-500">
-                  {new Date(series.first_air_date).getFullYear()}
+              <div className="card-body p-3 bg-gradient-to-t from-black to-transparent absolute bottom-0 w-full text-white">
+                <h2 className="card-title text-lg font-bold truncate">{series.name}</h2>
+                <p className="text-sm">
+                  {series.first_air_date ? new Date(series.first_air_date).getFullYear() : 'Año desconocido'}
                 </p>
               </div>
             </div>
