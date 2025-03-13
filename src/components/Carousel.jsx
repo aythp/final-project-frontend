@@ -15,7 +15,7 @@ export default function Carousel() {
   }, []);
 
   return (
-    <div className="overflow-hidden relative w-full" style={{ height: 'calc(100vh - 4rem)' }}>
+    <div className="overflow-hidden relative w-full">
       <div className="flex animate-scroll w-max">
         {[...media, ...media].map((item, index) => (
           <div key={index} className="flex-shrink-0">

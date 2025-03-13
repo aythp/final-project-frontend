@@ -112,7 +112,7 @@ export default function ViewedPage() {
                     <div className="flex flex-col w-full p-6">
                         <div className="flex flex-col items-center mb-8">
                             <h1 className="text-4xl font-bold text-white text-center mb-4">
-                                Contenido Visto
+                                Visto
                             </h1>
                         </div>
 

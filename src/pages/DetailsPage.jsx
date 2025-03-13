@@ -6,7 +6,6 @@ import Navbar from "../components/Navbar";
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import { BsBookmarkFill, BsBookmark } from 'react-icons/bs';
-import { FaRegCommentDots } from 'react-icons/fa';
 
 export default function DetailsPage() {
   const { id } = useParams();
@@ -146,10 +145,10 @@ export default function DetailsPage() {
 
   return (
     <div className="min-h-screen bg-slate-600 relative">
-      {/* Backdrop con overlay */}
+
       {media.backdrop && (
         <div 
-          className="fixed inset-0 bg-cover bg-center -z-10"
+          className="absolute inset-0 bg-cover bg-center z-0"
           style={{ 
             backgroundImage: `url(${media.backdrop})`,
             filter: 'brightness(0.3)'
@@ -157,16 +156,15 @@ export default function DetailsPage() {
         />
       )}
 
-      <div className="flex flex-grow">
+      <div className="flex flex-grow relative z-10">
         <div className="flex-1 p-6">
           <div className="relative">
             <div className="flex flex-col md:flex-row gap-8">
-              {/* Póster y botones de estado */}
               <div className="w-full md:w-1/3">
                 <img 
                   src={media.poster} 
                   alt={media.title}
-                  className="w-full rounded-lg shadow-xl"
+                  className="w-full max-w-[400px] mx-auto rounded-lg shadow-xl"
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = '/default-poster.png';
@@ -197,7 +195,6 @@ export default function DetailsPage() {
                 </div>
               </div>
 
-              {/* Información detallada */}
               <div className="w-full md:w-2/3">
                 <div className="bg-base-100/90 backdrop-blur-sm rounded-lg p-6 shadow-xl">
                   <h1 className="text-4xl font-bold mb-2">{media.title}</h1>
@@ -229,7 +226,6 @@ export default function DetailsPage() {
                     </div>
                   </div>
 
-                  {/* Sección de comentarios */}
                   <div className="mt-8">
                     
                     {isEditingComment ? (

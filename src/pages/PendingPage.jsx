@@ -39,32 +39,32 @@ export default function PendingPage() {
     };
 
     const fetchData = async () => {
-        try {
-            setLoading(true);
-            const authToken = localStorage.getItem("authToken");
-
-            if (!authToken) {
+            try {
+                setLoading(true);
+                const authToken = localStorage.getItem("authToken");
+                
+                if (!authToken) {
                 throw new Error("No se encontró el token de autenticación");
-            }
+                }
 
-            const [moviesResponse, seriesResponse] = await Promise.all([
-                axios.get("http://localhost:5005/api/movies", {
-                    headers: { Authorization: `Bearer ${authToken}` }
-                }),
-                axios.get("http://localhost:5005/api/series", {
-                    headers: { Authorization: `Bearer ${authToken}` }
-                })
-            ]);
+                const [moviesResponse, seriesResponse] = await Promise.all([
+                    axios.get("http://localhost:5005/api/movies", {
+                        headers: { Authorization: `Bearer ${authToken}` }
+                    }),
+                    axios.get("http://localhost:5005/api/series", {
+                        headers: { Authorization: `Bearer ${authToken}` }
+                    })
+                ]);
 
             setMovies(moviesResponse.data.filter(movie => movie.status === 'pending'));
             setSeries(seriesResponse.data.filter(series => series.status === 'pending'));
-        } catch (err) {
+            } catch (err) {
             console.error("Error al cargar los datos:", err);
             setError('Error al cargar los datos');
-        } finally {
-            setLoading(false);
-        }
-    };
+            } finally {
+                setLoading(false);
+            }
+        };
 
     useEffect(() => {
         fetchData();
@@ -107,12 +107,12 @@ export default function PendingPage() {
 
     return (
         <>
-            <div className="flex flex-col min-h-screen bg-slate-600">
-                <div className="flex flex-grow">
+        <div className="flex flex-col min-h-screen bg-slate-600">
+            <div className="flex flex-grow">
                     <div className="flex flex-col w-full p-6">
                         <div className="flex flex-col items-center mb-8">
                             <h1 className="text-4xl font-bold text-white text-center mb-4">
-                                Contenido Pendiente
+                                Pendiente
                             </h1>
                         </div>
 
@@ -133,28 +133,28 @@ export default function PendingPage() {
                             </div>
                         </div>
 
-                        {loading && (
+                    {loading && (
                             <div className="flex justify-center items-center h-32">
-                                <span className="loading loading-spinner text-primary"></span>
-                                <p className="ml-2 text-white">Cargando...</p>
-                            </div>
-                        )}
+                            <span className="loading loading-spinner text-primary"></span>
+                            <p className="ml-2 text-white">Cargando...</p>
+                        </div>
+                    )}
 
-                        {error && (
+                    {error && (
                             <div className="alert alert-error mb-8">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span>{error}</span>
-                            </div>
-                        )}
+                            <span>{error}</span>
+                        </div>
+                    )}
 
                         <div className="relative flex-grow">
                             <div className={`transition-opacity duration-300 ${activeTab === 'movies' ? 'opacity-100' : 'opacity-0 pointer-events-none absolute top-0 left-0 w-full'}`}>
                                 {movies.length === 0 ? (
-                                    <div className="text-center text-white">
+                        <div className="text-center text-white">
                                         <p>No tienes películas pendientes.</p>
-                                    </div>
+                        </div>
                                 ) : (
                                     <>
                                         <div className="grid grid-cols-3 gap-2 max-w-7xl mx-auto">
@@ -173,11 +173,11 @@ export default function PendingPage() {
                                                         src={movie.poster} 
                                                         alt={movie.title}
                                                         className="w-full h-full object-contain bg-black"
-                                                        onError={(e) => {
-                                                            e.target.onerror = null;
-                                                            e.target.src = '/default-poster.png';
-                                                        }}
-                                                    />
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = '/default-poster.png';
+                                        }}
+                                    />
                                                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex flex-col justify-between p-4">
                                                         <div className="flex justify-between items-start">
                                                             <h2 className="text-white text-xl font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -319,7 +319,7 @@ export default function PendingPage() {
                                                     </div>
                                                 </div>
                                             ))}
-                                        </div>
+                                </div>
                                         {/* Paginación para series */}
                                         <div className="flex justify-center mt-8">
                                             <div className="join">

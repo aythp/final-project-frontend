@@ -46,68 +46,78 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="relative w-full" style={{ height: 'calc(100vh - 4rem)' }}> 
-      <Carousel /> 
-      <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div> 
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="card w-full max-w-md bg-white/20 backdrop-blur-md rounded-xl shadow-xl">
-          <div className="card-body">
-            <h1 className="card-title text-2xl font-bold mb-4">Sign Up</h1>
-            <form onSubmit={handleSignupSubmit} className="space-y-4">
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Email</span>
-                </label>
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="input input-bordered"
-                  value={email}
-                  onChange={handleEmail}
-                />
-              </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Password</span>
-                </label>
-                <input
-                  type="password"
-                  placeholder="Enter your password"
-                  className="input input-bordered"
-                  value={password}
-                  onChange={handlePassword}
-                />
-              </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Name</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter your name"
-                  className="input input-bordered"
-                  value={name}
-                  onChange={handleName}
-                />
-              </div>
-              <div className="form-control mt-6">
-                <button type="submit" className="btn btn-primary">
-                  Sign Up
-                </button>
-              </div>
-            </form>
-            {errorMessage && (
-              <div className="alert alert-error mt-4">
-                <span>{errorMessage}</span>
-              </div>
-            )}
-            <p className="mt-4 text-center">
-              Already have an account?{" "}
-              <Link to={"/login"} className="link link-primary">
-                Login
-              </Link>
-            </p>
+    <div className="relative w-full flex items-center justify-center" style={{ height: 'calc(100vh - 4rem)' }}>
+      <div className="absolute inset-0 w-full h-full">
+        <Carousel />
+      </div>
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+      
+      <div className="card w-full max-w-md bg-base-100/20 backdrop-blur-md rounded-xl shadow-2xl z-10">
+        <div className="card-body p-8">
+          <div className="flex flex-col items-center mb-6">
+            <h1 className="text-3xl font-bold text-white">Crear Cuenta</h1>
+            <div className="h-1 w-20 bg-primary mt-2 rounded-full"></div>
           </div>
+          
+          <form onSubmit={handleSignupSubmit} className="space-y-5">
+            <div className="form-control">
+              <label className="block text-white text-sm font-medium mb-2">
+                Nombre
+              </label>
+              <input
+                type="text"
+                placeholder="Introduce tu nombre"
+                className="input input-bordered bg-base-100/30 text-white w-full"
+                value={name}
+                onChange={handleName}
+              />
+            </div>
+            
+            <div className="form-control">
+              <label className="block text-white text-sm font-medium mb-2">
+                Email
+              </label>
+              <input
+                type="email"
+                placeholder="Introduce tu email"
+                className="input input-bordered bg-base-100/30 text-white w-full"
+                value={email}
+                onChange={handleEmail}
+              />
+            </div>
+            
+            <div className="form-control">
+              <label className="block text-white text-sm font-medium mb-2">
+                Contraseña
+              </label>
+              <input
+                type="password"
+                placeholder="Introduce tu contraseña"
+                className="input input-bordered bg-base-100/30 text-white w-full"
+                value={password}
+                onChange={handlePassword}
+              />
+            </div>
+            
+            <div className="form-control mt-8">
+              <button type="submit" className="btn btn-primary">
+                Registrarse
+              </button>
+            </div>
+          </form>
+          
+          {errorMessage && (
+            <div className="alert alert-error mt-6">
+              <span>{errorMessage}</span>
+            </div>
+          )}
+          
+          <p className="mt-6 text-center text-white">
+            ¿Ya tienes una cuenta?{" "}
+            <Link to={"/login"} className="link link-primary font-bold">
+              Iniciar Sesión
+            </Link>
+          </p>
         </div>
       </div>
     </div>
