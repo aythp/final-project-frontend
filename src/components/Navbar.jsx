@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
-import { FaFilm, FaTv, FaHeart, FaClock, FaEye, FaCog, FaUser } from 'react-icons/fa';
+import { FaFilm, FaTv, FaHeart, FaEye, FaCog, FaUser } from 'react-icons/fa';
+import { BsBookmarkFill } from 'react-icons/bs';
 
 export default function Navbar() {
   const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
@@ -41,10 +42,10 @@ export default function Navbar() {
 
         {isLoggedIn && (
           <div className="dropdown dropdown-hover">
-            <label tabIndex={0} className="btn btn-ghost m-1">
+            <Link to="/profile" className="btn btn-ghost m-1">
               <FaHeart className="mr-2" />
               Mi Cuenta
-            </label>
+            </Link>
             <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
               <li>
                 <Link to="/likes" className="flex items-center">
@@ -54,7 +55,7 @@ export default function Navbar() {
               </li>
               <li>
                 <Link to="/pending" className="flex items-center">
-                  <FaClock className="mr-2" />
+                  <BsBookmarkFill className="mr-2" />
                   Pendientes
                 </Link>
               </li>
@@ -62,12 +63,6 @@ export default function Navbar() {
                 <Link to="/viewed" className="flex items-center">
                   <FaEye className="mr-2" />
                   Vistos
-                </Link>
-              </li>
-              <li>
-                <Link to="/settings" className="flex items-center">
-                  <FaCog className="mr-2" />
-                  Ajustes
                 </Link>
               </li>
             </ul>

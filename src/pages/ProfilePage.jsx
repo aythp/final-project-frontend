@@ -306,7 +306,7 @@ export default function ProfilePage() {
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-5 gap-4 max-w-7xl mx-auto">
+                    <div className="grid grid-cols-3 gap-2 max-w-7xl mx-auto">
                       {getCurrentItems(movies).map((movie) => (
                         <div 
                           key={movie._id} 
@@ -400,7 +400,7 @@ export default function ProfilePage() {
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-5 gap-4 max-w-7xl mx-auto">
+                    <div className="grid grid-cols-3 gap-2 max-w-7xl mx-auto">
                       {getCurrentItems(series).map((series) => (
                         <div 
                           key={series._id} 
