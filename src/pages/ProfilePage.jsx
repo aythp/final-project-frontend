@@ -9,6 +9,7 @@ import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import { BsBookmarkFill, BsBookmark } from 'react-icons/bs';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import { FaPlus } from 'react-icons/fa';
 
 export default function ProfilePage() {
   const { user } = useContext(AuthContext);
@@ -209,7 +210,7 @@ export default function ProfilePage() {
               </div>
               
               {/* Estadísticas */}
-              <div className="stats shadow bg-base-200 mb-6">
+              <div className="stats shadow bg-base-200">
                 <div className="stat">
                   <div className="stat-title">Total Películas</div>
                   <div className="stat-value">{stats.totalMovies}</div>
@@ -234,33 +235,38 @@ export default function ProfilePage() {
                   </div>
                 </div>
               </div>
-
-              <div className="flex gap-4">
-                <Link to="/feed" className="btn btn-primary">
-                  Ver Feed Social
-                </Link>
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => setIsSearching(!isSearching)}
-                >
-                  {isSearching ? 'Cerrar' : '+ Añadir Contenido'}
-                </button>
-              </div>
             </div>
 
             <div className="flex flex-col items-center mb-6">
-              <div className="tabs tabs-boxed">
+              <div className="flex items-center gap-4">
+                <div className="tabs tabs-boxed bg-base-300/50 p-1 rounded-xl">
+                  <button
+                    className={`tab text-lg font-medium transition-all duration-300 ${
+                      activeTab === 'movies' 
+                        ? 'bg-primary text-primary-content rounded-lg transform -translate-y-0.5' 
+                        : 'text-white hover:text-primary'
+                    }`}
+                    onClick={() => setActiveTab('movies')}
+                  >
+                    Películas
+                  </button>
+                  <button
+                    className={`tab text-lg font-medium transition-all duration-300 ${
+                      activeTab === 'series' 
+                        ? 'bg-primary text-primary-content rounded-lg transform -translate-y-0.5' 
+                        : 'text-white hover:text-primary'
+                    }`}
+                    onClick={() => setActiveTab('series')}
+                  >
+                    Series
+                  </button>
+                </div>
+                
                 <button
-                  className={`tab ${activeTab === 'movies' ? 'tab-active' : ''}`}
-                  onClick={() => setActiveTab('movies')}
+                  className="btn btn-circle btn-secondary text-xl w-10 h-10"
+                  onClick={() => setIsSearching(!isSearching)}
                 >
-                  Películas
-                </button>
-                <button
-                  className={`tab ${activeTab === 'series' ? 'tab-active' : ''}`}
-                  onClick={() => setActiveTab('series')}
-                >
-                  Series
+                  <FaPlus />
                 </button>
               </div>
             </div>
@@ -310,7 +316,7 @@ export default function ProfilePage() {
                       {getCurrentItems(movies).map((movie) => (
                         <div 
                           key={movie._id} 
-                          className={`relative group cursor-pointer transition-all duration-300 rounded-lg overflow-hidden aspect-[2/3] w-[200px] mx-auto
+                          className={`relative group cursor-pointer transition-all duration-300 rounded-lg overflow-hidden aspect-[2/3] w-[250px] mx-auto
                             ${movie.status === 'favorite' ? 'hover:shadow-[0_0_15px_rgba(255,0,0,0.7)]' : ''}
                             ${movie.status === 'viewed' ? 'hover:shadow-[0_0_15px_rgba(0,255,0,0.7)]' : ''}
                             ${movie.status === 'pending' ? 'hover:shadow-[0_0_15px_rgba(255,255,0,0.7)]' : ''}
@@ -404,7 +410,7 @@ export default function ProfilePage() {
                       {getCurrentItems(series).map((series) => (
                         <div 
                           key={series._id} 
-                          className={`relative group cursor-pointer transition-all duration-300 rounded-lg overflow-hidden aspect-[2/3] w-[200px] mx-auto
+                          className={`relative group cursor-pointer transition-all duration-300 rounded-lg overflow-hidden aspect-[2/3] w-[250px] mx-auto
                             ${series.status === 'favorite' ? 'hover:shadow-[0_0_15px_rgba(255,0,0,0.7)]' : ''}
                             ${series.status === 'viewed' ? 'hover:shadow-[0_0_15px_rgba(0,255,0,0.7)]' : ''}
                             ${series.status === 'pending' ? 'hover:shadow-[0_0_15px_rgba(255,255,0,0.7)]' : ''}

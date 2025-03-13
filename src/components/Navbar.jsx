@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
-import { FaFilm, FaTv, FaHeart, FaEye, FaCog, FaUser, FaList, FaSignOutAlt } from 'react-icons/fa';
+import { FaFilm, FaTv, FaHeart, FaEye, FaCog, FaUser, FaList, FaSignOutAlt, FaRandom, FaGlobe } from 'react-icons/fa';
 import { BsBookmarkFill } from 'react-icons/bs';
 
 export default function Navbar() {
@@ -72,6 +72,18 @@ export default function Navbar() {
                 </Link>
               </li>
             </ul>
+          </div>
+        )}
+
+        {isLoggedIn && (
+          <div className="flex items-center gap-4">
+            <Link to="/feed" className="btn btn-ghost btn-circle">
+              <FaGlobe className="text-xl" />
+            </Link>
+
+            <Link to="/random" className="btn btn-ghost btn-circle">
+              <FaRandom className="text-xl" />
+            </Link>
           </div>
         )}
       </div>
