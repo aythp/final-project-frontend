@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
-import { FaFilm, FaTv, FaHeart, FaEye, FaCog, FaUser } from 'react-icons/fa';
+import { FaFilm, FaTv, FaHeart, FaEye, FaCog, FaUser, FaUserCircle } from 'react-icons/fa';
 import { BsBookmarkFill } from 'react-icons/bs';
 
 export default function Navbar() {
@@ -10,8 +10,9 @@ export default function Navbar() {
   return (
     <div className="navbar bg-base-100 shadow-lg">
       <div className="navbar-start w-1/4">
-        <Link to="/" className="btn btn-ghost normal-case text-xl">
-          Home
+        <Link to="/" className="btn btn-ghost normal-case text-xl flex items-center">
+          <img src="/icon-app-final.png" alt="Watchery Logo" className="h-8 w-8 mr-2" />
+          <span className="font-bold">Watch</span><span className="font-light">ery</span>
         </Link>
       </div>
       
@@ -43,8 +44,8 @@ export default function Navbar() {
         {isLoggedIn && (
           <div className="dropdown dropdown-hover">
             <Link to="/profile" className="btn btn-ghost m-1">
-              <FaHeart className="mr-2" />
-              Mi Cuenta
+              <FaUserCircle className="mr-2" />
+              Mi Perfil
             </Link>
             <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
               <li>
