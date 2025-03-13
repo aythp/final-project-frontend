@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Sidebar from "../components/Sidebar";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
@@ -113,7 +112,6 @@ export default function DetailsPage() {
       <div className="min-h-screen bg-slate-600">
         <Navbar />
         <div className="flex flex-grow">
-          <Sidebar />
           <div className="flex-1 p-6 flex justify-center items-center">
             <span className="loading loading-spinner text-primary"></span>
             <p className="ml-2 text-white">Cargando...</p>
@@ -129,7 +127,6 @@ export default function DetailsPage() {
       <div className="min-h-screen bg-slate-600">
         <Navbar />
         <div className="flex flex-grow">
-          <Sidebar />
           <div className="flex-1 p-6">
             <div className="alert alert-error">
               <span>{error || "No se encontró el contenido"}</span>
@@ -161,7 +158,6 @@ export default function DetailsPage() {
       )}
 
       <div className="flex flex-grow">
-        <Sidebar />
         <div className="flex-1 p-6">
           <div className="relative">
             <div className="flex flex-col md:flex-row gap-8">

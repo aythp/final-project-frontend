@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 
 export default function FeedPage() {
@@ -37,7 +36,6 @@ export default function FeedPage() {
   return (
     <div className="flex flex-col min-h-screen bg-slate-600">
       <div className="flex flex-grow">
-        <Sidebar />
         <div className="flex-1 p-6">
           <h1 className="text-3xl font-bold text-white mb-8">Feed Global</h1>
 

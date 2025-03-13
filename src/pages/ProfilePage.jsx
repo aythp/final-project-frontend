@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from "../context/auth.context";
 import Footer from "../components/Footer";
-import Sidebar from "../components/Sidebar";
 import MovieSearch from '../components/MovieSearch';
 import SeriesSearch from '../components/SeriesSearch';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
@@ -192,7 +191,6 @@ export default function ProfilePage() {
     <>
       <div className="flex flex-col min-h-screen bg-slate-600">
         <div className="flex flex-grow">
-          <Sidebar />
           <div className="flex flex-col w-full p-6">
             <div className="flex flex-col items-center mb-8">
               <h1 className="text-3xl font-bold text-white text-center mb-4">
