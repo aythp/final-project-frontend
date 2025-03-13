@@ -323,10 +323,10 @@ export default function ViewedPage() {
                                                             >
                                                                 {series.status === 'pending' ? <BsBookmarkFill className="text-yellow-500" /> : <BsBookmark />}
                                                             </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                                         </div>
                                         {/* Paginación para series */}
                                         <div className="flex justify-center mt-8">
