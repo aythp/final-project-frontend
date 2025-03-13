@@ -29,7 +29,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/profile" element={<IsPrivate><ProfilePage /></IsPrivate>} />
-        <Route path="/settings" element={<IsPrivate><UserSettingsPage /></IsPrivate>} />
+        {/* <Route path="/settings" element={<IsPrivate><UserSettingsPage /></IsPrivate>} /> */}
         <Route path="/likes" element={<IsPrivate><LikesPage /></IsPrivate>} />
         <Route path="/viewed" element={<IsPrivate><ViewedPage /></IsPrivate>} />
         <Route path="/pending" element={<IsPrivate><PendingPage /></IsPrivate>} />

@@ -1,6 +1,6 @@
-export default function UserSettingsPage() {
+/* export default function UserSettingsPage() {
     return (
         <>
         </>
     );
-}
+} */

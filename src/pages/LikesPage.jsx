@@ -117,15 +117,23 @@ export default function LikesPage() {
             </div>
 
             <div className="flex flex-col items-center mb-6">
-              <div className="tabs tabs-boxed">
+              <div className="tabs tabs-boxed bg-base-300/50 p-1 rounded-xl">
                 <button
-                  className={`tab ${activeTab === 'movies' ? 'tab-active' : ''}`}
+                  className={`tab text-lg font-medium transition-all duration-300 ${
+                    activeTab === 'movies' 
+                      ? 'bg-primary text-primary-content rounded-lg transform -translate-y-0.5' 
+                      : 'text-white hover:text-primary'
+                  }`}
                   onClick={() => setActiveTab('movies')}
                 >
                   Películas
                 </button>
                 <button
-                  className={`tab ${activeTab === 'series' ? 'tab-active' : ''}`}
+                  className={`tab text-lg font-medium transition-all duration-300 ${
+                    activeTab === 'series' 
+                      ? 'bg-primary text-primary-content rounded-lg transform -translate-y-0.5' 
+                      : 'text-white hover:text-primary'
+                  }`}
                   onClick={() => setActiveTab('series')}
                 >
                   Series
@@ -161,7 +169,7 @@ export default function LikesPage() {
                       {getCurrentItems(movies).map((movie) => (
                         <div 
                           key={movie._id} 
-                          className={`relative group cursor-pointer transition-all duration-300 rounded-lg overflow-hidden aspect-[2/3] w-[200px] mx-auto
+                          className={`relative group cursor-pointer transition-all duration-300 rounded-lg overflow-hidden aspect-[2/3] w-[250px] mx-auto
                             ${movie.status === 'favorite' ? 'hover:shadow-[0_0_15px_rgba(255,0,0,0.7)]' : ''}
                             ${movie.status === 'viewed' ? 'hover:shadow-[0_0_15px_rgba(0,255,0,0.7)]' : ''}
                             ${movie.status === 'pending' ? 'hover:shadow-[0_0_15px_rgba(255,255,0,0.7)]' : ''}
@@ -255,7 +263,7 @@ export default function LikesPage() {
                       {getCurrentItems(series).map((series) => (
                         <div 
                           key={series._id} 
-                          className={`relative group cursor-pointer transition-all duration-300 rounded-lg overflow-hidden aspect-[2/3] w-[200px] mx-auto
+                          className={`relative group cursor-pointer transition-all duration-300 rounded-lg overflow-hidden aspect-[2/3] w-[250px] mx-auto
                             ${series.status === 'favorite' ? 'hover:shadow-[0_0_15px_rgba(255,0,0,0.7)]' : ''}
                             ${series.status === 'viewed' ? 'hover:shadow-[0_0_15px_rgba(0,255,0,0.7)]' : ''}
                             ${series.status === 'pending' ? 'hover:shadow-[0_0_15px_rgba(255,255,0,0.7)]' : ''}
