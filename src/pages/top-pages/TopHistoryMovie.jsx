@@ -11,7 +11,6 @@ export default function TopHistoryMovie() {
           <ManualCarousel mediaType="movie" timeWindow="all" />
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

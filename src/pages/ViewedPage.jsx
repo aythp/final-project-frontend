@@ -340,7 +340,6 @@ export default function ViewedPage() {
                         </div>
                     </div>
                 </div>
-                <Footer />
             </div>
         </>
     );

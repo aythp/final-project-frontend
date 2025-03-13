@@ -11,7 +11,6 @@ export default function TopYearSeries() {
           <ManualCarousel mediaType="tv" timeWindow="year" />
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

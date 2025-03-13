@@ -87,7 +87,6 @@ export default function FeedPage() {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

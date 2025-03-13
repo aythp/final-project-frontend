@@ -11,7 +11,6 @@ export default function TopYearMovie() {
           <ManualCarousel mediaType="movie" timeWindow="year" />
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

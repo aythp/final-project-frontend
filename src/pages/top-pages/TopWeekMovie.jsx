@@ -11,7 +11,6 @@ export default function TopWeekMovie() {
           <ManualCarousel mediaType="movie" timeWindow="week" />
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

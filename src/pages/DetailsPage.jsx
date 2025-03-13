@@ -277,7 +277,6 @@ export default function DetailsPage() {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

@@ -11,7 +11,6 @@ export default function TopWeekSeries() {
           <ManualCarousel mediaType="tv" timeWindow="week" />
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

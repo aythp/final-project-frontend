@@ -11,7 +11,6 @@ export default function TopHistorySeries() {
           <ManualCarousel mediaType="tv" timeWindow="all" />
         </div>
       </div>
-      <Footer />
     </div>
   );
 }
