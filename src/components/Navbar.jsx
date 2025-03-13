@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
-import { FaFilm, FaTv, FaHeart, FaEye, FaCog, FaUser, FaUserCircle } from 'react-icons/fa';
+import { FaFilm, FaTv, FaHeart, FaEye, FaCog, FaUser, FaList, FaSignOutAlt } from 'react-icons/fa';
 import { BsBookmarkFill } from 'react-icons/bs';
 
 export default function Navbar() {
@@ -11,8 +11,13 @@ export default function Navbar() {
     <div className="navbar bg-base-100 shadow-lg">
       <div className="navbar-start w-1/4">
         <Link to="/" className="btn btn-ghost normal-case text-xl flex items-center">
-          <img src="/icon-app-final.png" alt="Watchery Logo" className="h-8 w-8 mr-2" />
-          <span className="font-bold">Watch</span><span className="font-light">ery</span>
+          <img src="/icon-app-final.png" alt="Watchery Logo" className="h-10 w-10 mr-2 hover:rotate-12 transition-transform duration-300" />
+          <div className="flex flex-col items-start">
+            <div className="flex">
+              <span className="font-bold text-2xl">Watch</span>
+              <span className="font-light text-2xl">ery</span>
+            </div>
+          </div>
         </Link>
       </div>
       
@@ -43,10 +48,10 @@ export default function Navbar() {
 
         {isLoggedIn && (
           <div className="dropdown dropdown-hover">
-            <Link to="/profile" className="btn btn-ghost m-1">
-              <FaUserCircle className="mr-2" />
-              Mi Perfil
-            </Link>
+            <label tabIndex={0} className="btn btn-ghost m-1">
+              <FaList className="mr-2" />
+              Mis Listas
+            </label>
             <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
               <li>
                 <Link to="/likes" className="flex items-center">
@@ -73,26 +78,16 @@ export default function Navbar() {
 
       <div className="navbar-end w-1/4">
         {isLoggedIn && (
-          <div className="dropdown dropdown-end">
-            <label tabIndex={0} className="flex items-center gap-2 cursor-pointer">
+          <div className="flex items-center gap-3">
+            <Link to="/profile" className="btn btn-ghost btn-circle">
               <FaUser className="text-xl" />
-              <span className="text-base-content">{user?.name}</span>
-            </label>
-            <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
-              <li>
-                <Link to="/profile" className="justify-between">
-                  Mi Perfil
-                </Link>
-              </li>
-              <li>
-                <Link to="/settings">
-                  Ajustes
-                </Link>
-              </li>
-              <li>
-                <button onClick={logOutUser}>Cerrar Sesión</button>
-              </li>
-            </ul>
+            </Link>
+            <Link to="/settings" className="btn btn-ghost btn-circle">
+              <FaCog className="text-xl" />
+            </Link>
+            <button onClick={logOutUser} className="btn btn-ghost btn-circle text-red-500 hover:bg-red-100">
+              <FaSignOutAlt className="text-xl" />
+            </button>
           </div>
         )}
 

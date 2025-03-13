@@ -15,6 +15,13 @@ import ViewedPage from "./pages/ViewedPage";
 import PendingPage from "./pages/PendingPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import Footer from "./components/Footer";
+import TopWeekMovie from "./pages/top-pages/TopWeekMovie";
+import TopYearMovie from "./pages/top-pages/TopYearMovie";
+import TopHistoryMovie from "./pages/top-pages/TopHistoryMovie";
+import TopWeekSeries from "./pages/top-pages/TopWeekSeries";
+import TopYearSeries from "./pages/top-pages/TopYearSeries";
+import TopHistorySeries from "./pages/top-pages/TopHistorySeries";
+
 export default function App() {
   return (
     <>
@@ -30,6 +37,13 @@ export default function App() {
         <Route path="/movies/:id" element={<IsPrivate><DetailsPage /></IsPrivate>} />
         <Route path="/series/:id" element={<IsPrivate><DetailsPage /></IsPrivate>} />
         
+        <Route path="/top-movies/week" element={<TopWeekMovie />} />
+        <Route path="/top-movies/year" element={<TopYearMovie />} />
+        <Route path="/top-movies/all" element={<TopHistoryMovie />} />
+        <Route path="/top-series/week" element={<TopWeekSeries />} />
+        <Route path="/top-series/year" element={<TopYearSeries />} />
+        <Route path="/top-series/all" element={<TopHistorySeries />} />
+
         <Route path="/feed" element={<IsPrivate><FeedPage /></IsPrivate>} />
         <Route path="/signup" element={<IsAnon><SignupPage /></IsAnon>} />
         <Route path="/login" element={<IsAnon><LoginPage /></IsAnon>} />
