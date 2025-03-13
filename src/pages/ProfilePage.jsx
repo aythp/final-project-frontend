@@ -306,11 +306,11 @@ export default function ProfilePage() {
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-5 gap-4 max-w-7xl mx-auto">
                       {getCurrentItems(movies).map((movie) => (
                         <div 
                           key={movie._id} 
-                          className={`relative group cursor-pointer transition-all duration-300 rounded-lg overflow-hidden h-[500px]
+                          className={`relative group cursor-pointer transition-all duration-300 rounded-lg overflow-hidden aspect-[2/3] w-[200px] mx-auto
                             ${movie.status === 'favorite' ? 'hover:shadow-[0_0_15px_rgba(255,0,0,0.7)]' : ''}
                             ${movie.status === 'viewed' ? 'hover:shadow-[0_0_15px_rgba(0,255,0,0.7)]' : ''}
                             ${movie.status === 'pending' ? 'hover:shadow-[0_0_15px_rgba(255,255,0,0.7)]' : ''}
@@ -321,7 +321,7 @@ export default function ProfilePage() {
                           <img 
                             src={movie.poster} 
                             alt={movie.title}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain bg-black"
                             onError={(e) => {
                               e.target.onerror = null;
                               e.target.src = '/default-poster.png';
@@ -400,11 +400,11 @@ export default function ProfilePage() {
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-5 gap-4 max-w-7xl mx-auto">
                       {getCurrentItems(series).map((series) => (
                         <div 
                           key={series._id} 
-                          className={`relative group cursor-pointer transition-all duration-300 rounded-lg overflow-hidden h-[500px]
+                          className={`relative group cursor-pointer transition-all duration-300 rounded-lg overflow-hidden aspect-[2/3] w-[200px] mx-auto
                             ${series.status === 'favorite' ? 'hover:shadow-[0_0_15px_rgba(255,0,0,0.7)]' : ''}
                             ${series.status === 'viewed' ? 'hover:shadow-[0_0_15px_rgba(0,255,0,0.7)]' : ''}
                             ${series.status === 'pending' ? 'hover:shadow-[0_0_15px_rgba(255,255,0,0.7)]' : ''}
@@ -415,7 +415,7 @@ export default function ProfilePage() {
                           <img 
                             src={series.poster} 
                             alt={series.title}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain bg-black"
                             onError={(e) => {
                               e.target.onerror = null;
                               e.target.src = '/default-poster.png';
