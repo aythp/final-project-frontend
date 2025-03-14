@@ -44,32 +44,6 @@ final-project-frontend/
 └── tailwind.config.js  # Configuración de Tailwind CSS
 ```
 
-## Instalación
-
-1. Clona el repositorio:
-```bash
-git clone <url-del-repositorio>
-cd final-project-frontend
-```
-
-2. Instala las dependencias:
-```bash
-npm install
-```
-
-3. Configura las variables de entorno:
-Crea un archivo `.env` en la raíz del proyecto con las siguientes variables:
-```
-REACT_APP_API_URL=http://localhost:5005/api
-```
-
-4. Inicia la aplicación:
-```bash
-npm start
-```
-
-La aplicación estará disponible en [http://localhost:3000](http://localhost:3000).
-
 ## Funcionalidades
 
 ### Autenticación
@@ -98,22 +72,6 @@ La aplicación estará disponible en [http://localhost:3000](http://localhost:30
 - Ver y editar información del perfil
 - Ver estadísticas de visualización
 - Gestionar listas personalizadas
-
-## Despliegue
-Para construir la aplicación para producción:
-```bash
-npm run build
-```
-
-Esto generará una carpeta `build` con los archivos optimizados para producción.
-
-## Contribución
-Para contribuir al proyecto, por favor sigue estos pasos:
-1. Haz un fork del repositorio
-2. Crea una rama para tu funcionalidad (`git checkout -b feature/nueva-funcionalidad`)
-3. Haz commit de tus cambios (`git commit -m 'Añadir nueva funcionalidad'`)
-4. Haz push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Abre un Pull Request
 
 ## Licencia
 Este proyecto está bajo la Licencia MIT.
