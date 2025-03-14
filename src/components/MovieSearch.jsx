@@ -89,34 +89,40 @@ export default function MovieSearch(props) {
       )}
 
       {suggestions.length > 0 && (
-        <div className="mt-4 grid grid-cols-4 gap-3">
-          {suggestions.map((movie) => (
-            <div
-              key={movie.id}
-              className="card bg-base-100 shadow-xl hover:shadow-2xl hover:scale-105 cursor-pointer transition-all duration-300 ease-in-out overflow-hidden h-[350px]"
-              onClick={() => handleSaveMovie(movie)}
-            >
-              <figure className="relative aspect-[2/3] w-full">
-                {movie.poster_path ? (
-                  <img
-                    src={`${IMAGE_BASE_URL}${movie.poster_path}`}
-                    alt={movie.title}
-                    className="w-full h-full object-contain bg-black"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-800 text-white">
-                    No hay poster
+        <div className="mt-6">
+          <div className="grid grid-cols-2 gap-4">
+            {suggestions.map((movie) => (
+              <div
+                key={movie.id}
+                className="card bg-base-100 shadow-xl hover:shadow-2xl hover:scale-105 cursor-pointer transition-all duration-300 ease-in-out overflow-hidden"
+                onClick={() => handleSaveMovie(movie)}
+              >
+                <div className="flex h-24">
+                  <div className="w-1/3">
+                    {movie.poster_path ? (
+                      <img
+                        src={`${IMAGE_BASE_URL}${movie.poster_path}`}
+                        alt={movie.title}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="h-full w-full flex items-center justify-center bg-gray-800 text-white text-xs">
+                        No hay poster
+                      </div>
+                    )}
                   </div>
-                )}
-              </figure>
-              <div className="card-body p-3 bg-gradient-to-t from-black to-transparent absolute bottom-0 w-full text-white">
-                <h2 className="card-title text-lg font-bold truncate">{movie.title}</h2>
-                <p className="text-sm">
-                  {movie.release_date ? new Date(movie.release_date).getFullYear() : 'Año desconocido'}
-                </p>
+                  <div className="w-2/3 p-2 flex flex-col justify-between">
+                    <h2 className="font-bold text-sm line-clamp-2">{movie.title}</h2>
+                    <div className="flex justify-end items-center">
+                      <p className="text-xs text-gray-500">
+                        {movie.release_date ? new Date(movie.release_date).getFullYear() : 'Año desconocido'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
     </div>

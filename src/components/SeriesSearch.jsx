@@ -88,34 +88,40 @@ export default function SeriesSearch(props) {
       )}
 
       {suggestions.length > 0 && (
-        <div className="mt-4 grid grid-cols-4 gap-3">
-          {suggestions.map((series) => (
-            <div
-              key={series.id}
-              className="card bg-base-100 shadow-xl hover:shadow-2xl hover:scale-105 cursor-pointer transition-all duration-300 ease-in-out overflow-hidden h-[350px]"
-              onClick={() => handleSaveSeries(series)}
-            >
-              <figure className="relative aspect-[2/3] w-full">
-                {series.poster_path ? (
-                  <img
-                    src={`${IMAGE_BASE_URL}${series.poster_path}`}
-                    alt={series.name}
-                    className="w-full h-full object-contain bg-black"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-800 text-white">
-                    No hay poster
+        <div className="mt-6">
+          <div className="grid grid-cols-2 gap-4">
+            {suggestions.map((series) => (
+              <div
+                key={series.id}
+                className="card bg-base-100 shadow-xl hover:shadow-2xl hover:scale-105 cursor-pointer transition-all duration-300 ease-in-out overflow-hidden"
+                onClick={() => handleSaveSeries(series)}
+              >
+                <div className="flex h-24">
+                  <div className="w-1/3">
+                    {series.poster_path ? (
+                      <img
+                        src={`${IMAGE_BASE_URL}${series.poster_path}`}
+                        alt={series.name}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="h-full w-full flex items-center justify-center bg-gray-800 text-white text-xs">
+                        No hay poster
+                      </div>
+                    )}
                   </div>
-                )}
-              </figure>
-              <div className="card-body p-3 bg-gradient-to-t from-black to-transparent absolute bottom-0 w-full text-white">
-                <h2 className="card-title text-lg font-bold truncate">{series.name}</h2>
-                <p className="text-sm">
-                  {series.first_air_date ? new Date(series.first_air_date).getFullYear() : 'Año desconocido'}
-                </p>
+                  <div className="w-2/3 p-2 flex flex-col justify-between">
+                    <h2 className="font-bold text-sm line-clamp-2">{series.name}</h2>
+                    <div className="flex justify-end items-center">
+                      <p className="text-xs text-gray-500">
+                        {series.first_air_date ? new Date(series.first_air_date).getFullYear() : 'Año desconocido'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
     </div>

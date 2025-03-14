@@ -17,7 +17,9 @@ export async function getTrending(mediaType, timeWindow) {
     const response = await axios.get(`${BASE_URL}${endpoint}`, {
       params: {
         api_key: API_KEY,
-        language: 'es-ES'
+        language: 'es-ES',
+        sort_by: 'vote_count.desc',
+        'vote_count.gte': 15000
       }
     });
 
@@ -30,9 +32,13 @@ export async function getTrending(mediaType, timeWindow) {
 
 export async function getTopMovies() {
   try {
-    const response = await axios.get(`${BASE_URL}/movie/top_rated`, {
+    const response = await axios.get(`${BASE_URL}/discover/movie`, {
       params: {
         api_key: API_KEY,
+        language: 'es-ES',
+        sort_by: 'vote_count.desc',
+        'vote_count.gte': 15000,
+        page: 1
       },
     });
 
@@ -45,9 +51,13 @@ export async function getTopMovies() {
 
 export async function getTopSeries() {
   try {
-    const response = await axios.get(`${BASE_URL}/tv/top_rated`, {
+    const response = await axios.get(`${BASE_URL}/discover/tv`, {
       params: {
         api_key: API_KEY,
+        language: 'es-ES',
+        sort_by: 'vote_count.desc',
+        'vote_count.gte': 15000,
+        page: 1
       },
     });
 
