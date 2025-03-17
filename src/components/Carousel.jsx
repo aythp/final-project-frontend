@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getCombinedMedia } from '../api/api';
+import { getCombinedMedia } from '../api/Api';
 
 export default function Carousel() {
   const [media, setMedia] = useState([]);
@@ -30,3 +30,4 @@ export default function Carousel() {
     </div>
   );
 }
+
