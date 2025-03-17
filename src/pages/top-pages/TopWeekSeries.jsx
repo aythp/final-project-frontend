@@ -1,6 +1,5 @@
 import React from 'react';
 import ManualCarousel from '../../components/ManualCarousel';
-import Footer from '../../components/Footer';
 
 export default function TopWeekSeries() {
   return (

@@ -2,7 +2,6 @@ import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from "../context/auth.context";
-import Footer from "../components/Footer";
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import { BsBookmarkFill, BsBookmark } from 'react-icons/bs';
@@ -25,7 +24,7 @@ export default function LikesPage() {
       const endpoint = itemType === 'series' ? 'series' : `${itemType}s`;
       
       await axios.put(
-        `http://localhost:5005/api/${endpoint}/${itemId}/status`,
+        `${process.env.REACT_APP_SERVER_URL}/api/${endpoint}/${itemId}/status`,
         { status: newStatus },
         {
           headers: { Authorization: `Bearer ${authToken}` }
@@ -48,10 +47,10 @@ export default function LikesPage() {
       }
 
       const [moviesResponse, seriesResponse] = await Promise.all([
-        axios.get("http://localhost:5005/api/movies", {
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/api/movies`, {
           headers: { Authorization: `Bearer ${authToken}` }
         }),
-        axios.get("http://localhost:5005/api/series", {
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/api/series`, {
           headers: { Authorization: `Bearer ${authToken}` }
         })
       ]);
@@ -76,7 +75,7 @@ export default function LikesPage() {
         const authToken = localStorage.getItem("authToken");
         const endpoint = itemType === 'series' ? 'series' : `${itemType}s`;
         
-        await axios.delete(`http://localhost:5005/api/${endpoint}/${itemId}`, {
+        await axios.delete(`${process.env.REACT_APP_SERVER_URL}/api/${endpoint}/${itemId}`, {
           headers: { Authorization: `Bearer ${authToken}` }
         });
 
@@ -91,16 +90,13 @@ export default function LikesPage() {
       }
     }
   };
-
-  // Función para obtener los elementos de la página actual
-  const getCurrentItems = (items) => {
+const getCurrentItems = (items) => {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     return items.slice(indexOfFirstItem, indexOfLastItem);
   };
 
-  // Función para cambiar de página
-  const handlePageChange = (page) => {
+const handlePageChange = (page) => {
     setCurrentPage(page);
     window.scrollTo(0, 0);
   };

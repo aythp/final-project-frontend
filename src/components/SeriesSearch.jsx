@@ -50,7 +50,7 @@ export default function SeriesSearch(props) {
     try {
       const authToken = localStorage.getItem("authToken");
       const response = await axios.post(
-        "http://localhost:5005/api/series/search",
+        `${process.env.REACT_APP_SERVER_URL}/api/series/search`,
         { 
           query: series.name,
           tmdbId: series.id

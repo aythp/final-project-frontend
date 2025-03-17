@@ -30,7 +30,7 @@ export default function FeedPage() {
           throw new Error("No authentication token found");
         }
 
-        const response = await axios.get("http://localhost:5005/api/feed", {
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/feed`, {
           headers: { Authorization: `Bearer ${authToken}` }
         });
         

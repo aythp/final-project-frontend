@@ -51,7 +51,7 @@ export default function MovieSearch(props) {
       const authToken = localStorage.getItem("authToken");
       
       const response = await axios.post(
-        "http://localhost:5005/api/movies/search",
+        `${process.env.REACT_APP_SERVER_URL}/api/movies/search`,
         { 
           query: movie.title,
           tmdbId: movie.id 

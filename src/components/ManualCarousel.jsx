@@ -48,14 +48,14 @@ export default function ManualCarousel({ mediaType, timeWindow }) {
             navigate('/login');
             return;
         }
-
+    
         try {
             const authToken = localStorage.getItem("authToken");
             const endpoint = mediaType === 'movie' ? 'movies' : 'series';
             const query = mediaType === 'movie' ? item.title : item.name;
-
+    
             await axios.post(
-                `http://localhost:5005/api/${endpoint}/search`,
+                `${process.env.REACT_APP_SERVER_URL}/api/${endpoint}/search`,
                 { query },
                 { headers: { Authorization: `Bearer ${authToken}` } }
             );
@@ -63,7 +63,6 @@ export default function ManualCarousel({ mediaType, timeWindow }) {
             console.error('Error adding to list:', error);
         }
     };
-
 
     if (loading) {
         return <div className="loading loading-spinner loading-lg"></div>;

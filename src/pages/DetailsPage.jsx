@@ -30,7 +30,7 @@ export default function DetailsPage() {
         }
 
         try {
-          const movieResponse = await axios.get(`http://localhost:5005/api/movies/${id}`, {
+          const movieResponse = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/movies/${id}`, {
             headers: { Authorization: `Bearer ${authToken}` }
           });
           console.log("Movie data:", movieResponse.data);
@@ -40,9 +40,10 @@ export default function DetailsPage() {
         } catch (movieError) {
           console.log("Not a movie, trying series...");
 
-          const seriesResponse = await axios.get(`http://localhost:5005/api/series/${id}`, {
+          const seriesResponse = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/series/${id}`, {
             headers: { Authorization: `Bearer ${authToken}` }
           });
+
           console.log("Series data:", seriesResponse.data);
           setMedia(seriesResponse.data);
           setMediaType('series');
@@ -70,12 +71,12 @@ export default function DetailsPage() {
       const endpoint = mediaType === 'series' ? 'series' : `${mediaType}s`;
       
       const response = await axios.put(
-        `http://localhost:5005/api/${endpoint}/${id}/status`,
-        { status: newStatus },
-        {
-          headers: { Authorization: `Bearer ${authToken}` }
-        }
-      );
+  `${process.env.REACT_APP_SERVER_URL}/api/${endpoint}/${id}/status`,
+  { status: newStatus },
+  {
+    headers: { Authorization: `Bearer ${authToken}` }
+  }
+);
 
       setMedia(response.data);
     } catch (error) {
@@ -92,7 +93,7 @@ export default function DetailsPage() {
       const endpoint = mediaType === 'series' ? 'series' : `${mediaType}s`;
       
       const response = await axios.put(
-        `http://localhost:5005/api/${endpoint}/${id}/comment`,
+        `${process.env.REACT_APP_SERVER_URL}/api/${endpoint}/${id}/comment`,
         { comment },
         {
           headers: { Authorization: `Bearer ${authToken}` }

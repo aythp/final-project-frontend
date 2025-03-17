@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getCombinedMedia } from '../api/Api';
+import { getCombinedMedia } from '../api/api';
 
 export default function Carousel() {
   const [media, setMedia] = useState([]);
