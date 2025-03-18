@@ -6,19 +6,24 @@ export default function MovieSearch(props) {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const API_KEY = "4c2b98d248efaa8035b951b8303b65e7";
+  const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
   const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
   useEffect(() => {
+    if (!API_KEY) {
+      console.error('TMDB API Key no está configurada');
+      return;
+    }
+
     const delayDebounceFn = setTimeout(() => {
       searchMovies(query);
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [query]);
+  }, [query, API_KEY]);
 
   const searchMovies = async (searchQuery) => {
-    if (!searchQuery.trim()) {
+    if (!searchQuery.trim() || !API_KEY) {
       setSuggestions([]);
       return;
     }

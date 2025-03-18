@@ -10,11 +10,17 @@ export default function ManualCarousel({ mediaType, timeWindow }) {
     const [loading, setLoading] = useState(true);
     const searchRef = useRef(null);
 
-    const API_KEY = "4c2b98d248efaa8035b951b8303b65e7";
+    const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
     const BASE_URL = "https://api.themoviedb.org/3";
 
     useEffect(() => {
         const fetchData = async () => {
+            if (!API_KEY) {
+                console.error('TMDB API Key no está configurada');
+                setLoading(false);
+                return;
+            }
+
             try {
                 let endpoint;
                 if (timeWindow === 'week') {
@@ -41,7 +47,7 @@ export default function ManualCarousel({ mediaType, timeWindow }) {
         };
 
         fetchData();
-    }, [mediaType, timeWindow]);
+    }, [mediaType, timeWindow, API_KEY]);
 
     const handleAddToList = async (item) => {
         if (!isLoggedIn) {
