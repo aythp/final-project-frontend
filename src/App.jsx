@@ -5,9 +5,9 @@ import ProfilePage from "./pages/ProfilePage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import Navbar from "./components/Navbar";
-import IsPrivate from "./components/IsPrivate/IsPrivate";
-import IsAnon from "./components/IsAnon/IsAnon";
-import UserSettingsPage from "./pages/UserSettingsPage";
+import IsPrivate from "./components/IsPrivate";
+import IsAnon from "./components/IsAnon";
+/* import UserSettingsPage from "./pages/UserSettingsPage"; */
 import FeedPage from "./pages/FeedPage";
 import DetailsPage from "./pages/DetailsPage";
 import LikesPage from "./pages/LikesPage";
