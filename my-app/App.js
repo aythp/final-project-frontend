@@ -7,7 +7,7 @@ export default function App() {
     <View style={styles.container}>
       <StatusBar backgroundColor="#1F2937" barStyle="light-content" />
       <WebView
-        source={{ uri: 'https://watchery.netlify.app/' }} // Reemplaza con la URL de tu página web
+        source={{ uri: 'https://sga-project.netlify.app/' }}
         style={styles.webview}
       />
     </View>

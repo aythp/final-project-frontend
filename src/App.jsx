@@ -21,6 +21,8 @@ import TopHistoryMovie from "./pages/top-pages/TopHistoryMovie";
 import TopWeekSeries from "./pages/top-pages/TopWeekSeries";
 import TopYearSeries from "./pages/top-pages/TopYearSeries";
 import TopHistorySeries from "./pages/top-pages/TopHistorySeries";
+import ChatbotPage from "./pages/ChatbotPage";
+import RandomPage from "./pages/RandomPage";
 
 export default function App() {
   return (
@@ -45,9 +47,13 @@ export default function App() {
         <Route path="/top-series/all" element={<TopHistorySeries />} />
 
         <Route path="/feed" element={<IsPrivate><FeedPage /></IsPrivate>} />
+        <Route path="/chatbot" element={<IsPrivate><ChatbotPage /></IsPrivate>} />
+        <Route path="/random" element={<IsPrivate><RandomPage /></IsPrivate>} />
+        
+        <Route path="*" element={<NotFoundPage />} />
+
         <Route path="/signup" element={<IsAnon><SignupPage /></IsAnon>} />
         <Route path="/login" element={<IsAnon><LoginPage /></IsAnon>} />
-        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />
     </>

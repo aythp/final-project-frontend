@@ -3,9 +3,10 @@ import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
 import { FaFilm, FaTv, FaHeart, FaEye, FaCog, FaUser, FaList, FaSignOutAlt, FaRandom, FaGlobe } from 'react-icons/fa';
 import { BsBookmarkFill } from 'react-icons/bs';
+import { RiRobot2Line } from "react-icons/ri";
 
 export default function Navbar() {
-  const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
+  const { isLoggedIn, logOutUser } = useContext(AuthContext);
 
   return (
     <div className="navbar bg-base-100 shadow-lg">
@@ -84,6 +85,11 @@ export default function Navbar() {
             <Link to="/random" className="btn btn-ghost btn-circle">
               <FaRandom className="text-xl" />
             </Link>
+
+            <Link to ="/chatbot" className="btn btn-ghost btn-circle">
+              <RiRobot2Line className="text-xl" />
+            </Link>
+
           </div>
         )}
       </div>
