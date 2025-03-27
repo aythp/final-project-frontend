@@ -57,7 +57,6 @@ export default function App() {
         <Route path="/login" element={<IsAnon><LoginPage /></IsAnon>} />
       </Routes>
       <Footer />
-      {/* El componente Chatbot se renderiza en todas las páginas, pero solo se mostrará si el usuario ha iniciado sesión */}
       <Chatbot />
     </>
   );

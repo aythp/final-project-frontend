@@ -1,0 +1,45 @@
+#n8n-chat .n8n-chat-window-container * {
+    color: black !important;
+}
+
+#n8n-chat .n8n-chat-window-container .n8n-chat-message-bubble {
+    color: black !important;
+    font-weight: normal !important;
+}
+
+#n8n-chat .n8n-chat-window-container .n8n-chat-message-bubble-user {
+    background-color: #e1f5fe !important;
+    border: 1px solid #b3e5fc !important;
+}
+
+#n8n-chat .n8n-chat-window-container .n8n-chat-message-bubble-bot {
+    background-color: #f5f5f5 !important;
+    border: 1px solid #e0e0e0 !important;
+}
+
+#n8n-chat .n8n-chat-input-container textarea {
+    color: black !important;
+    font-weight: normal !important;
+}
+
+#n8n-chat .n8n-chat-window-header-title, 
+#n8n-chat .n8n-chat-window-header-subtitle {
+    color: black !important;
+    font-weight: bold !important;
+}
+
+#n8n-chat .n8n-chat-input-container button {
+    background-color: #2196f3 !important;
+    color: white !important;
+}
+
+#n8n-chat .n8n-chat-window-container {
+    background-color: white !important;
+    border: 1px solid #e0e0e0 !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+#n8n-chat .n8n-chat-window-container a {
+    color: #2196f3 !important;
+    text-decoration: underline !important;
+}
