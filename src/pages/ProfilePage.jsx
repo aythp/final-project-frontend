@@ -151,14 +151,12 @@ export default function ProfilePage() {
           headers: { Authorization: `Bearer ${authToken}` }
         });
 
-        // Actualizar el estado local
         if (itemType === 'movie') {
           setMovies(prevMovies => prevMovies.filter(movie => movie._id !== itemId));
         } else {
           setSeries(prevSeries => prevSeries.filter(series => series._id !== itemId));
         }
-
-        // Recalcular estadísticas
+        
         calculateStats(
           itemType === 'movie' ? movies.filter(m => m._id !== itemId) : movies,
           itemType === 'series' ? series.filter(s => s._id !== itemId) : series
@@ -205,6 +203,8 @@ export default function ProfilePage() {
                 onStatusChange={handleStatusChange}
                 onDelete={handleDelete}
                 statusLoading={statusLoading}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
               />
             )}
           </div>

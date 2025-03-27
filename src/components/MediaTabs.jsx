@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TabSelector from './TabSelector';
 import MediaGrid from './MediaGrid';
 
@@ -9,10 +9,10 @@ export default function MediaTabs ({
   onDelete, 
   statusLoading,
   moviesEmptyMessage,
-  seriesEmptyMessage
+  seriesEmptyMessage,
+  activeTab,
+  setActiveTab
 }) {
-  const [activeTab, setActiveTab] = useState('movies');
-
   return (
     <>
       <TabSelector activeTab={activeTab} setActiveTab={setActiveTab} />
