@@ -10,6 +10,7 @@ export default function LikesPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [statusLoading, setStatusLoading] = useState({});
+  const [activeTab, setActiveTab] = useState('movies');
 
   const handleStatusChange = async (itemId, itemType, newStatus) => {
     try {
@@ -121,8 +122,10 @@ export default function LikesPage() {
                 onStatusChange={handleStatusChange}
                 onDelete={handleDelete}
                 statusLoading={statusLoading}
-                moviesEmptyMessage="No tienes películas favoritas."
-                seriesEmptyMessage="No tienes series favoritas."
+                moviesEmptyMessage="No tienes películas que te gusten."
+                seriesEmptyMessage="No tienes series que te gusten."
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
               />
             )}
           </div>

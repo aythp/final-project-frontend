@@ -10,6 +10,7 @@ export default function PendingPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [statusLoading, setStatusLoading] = useState({});
+    const [activeTab, setActiveTab] = useState('movies');
 
     const handleStatusChange = async (itemId, itemType, newStatus) => {
         try {
@@ -123,6 +124,8 @@ export default function PendingPage() {
                             statusLoading={statusLoading}
                             moviesEmptyMessage="No tienes películas pendientes."
                             seriesEmptyMessage="No tienes series pendientes."
+                            activeTab={activeTab}
+                            setActiveTab={setActiveTab}
                         />
                     )}
                 </div>

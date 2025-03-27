@@ -10,6 +10,7 @@ export default function ViewedPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [statusLoading, setStatusLoading] = useState({});
+    const [activeTab, setActiveTab] = useState('movies');
 
     const handleStatusChange = async (itemId, itemType, newStatus) => {
         try {
@@ -121,8 +122,10 @@ export default function ViewedPage() {
                             onStatusChange={handleStatusChange}
                             onDelete={handleDelete}
                             statusLoading={statusLoading}
-                            moviesEmptyMessage="No has visto ninguna película todavía."
-                            seriesEmptyMessage="No has visto ninguna serie todavía."
+                            moviesEmptyMessage="No tienes películas vistas."
+                            seriesEmptyMessage="No tienes series vistas."
+                            activeTab={activeTab}
+                            setActiveTab={setActiveTab}
                         />
                     )}
                 </div>

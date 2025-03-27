@@ -23,6 +23,7 @@ import TopYearSeries from "./pages/top-pages/TopYearSeries";
 import TopHistorySeries from "./pages/top-pages/TopHistorySeries";
 import ChatbotPage from "./pages/ChatbotPage";
 import RandomPage from "./pages/RandomPage";
+import Chatbot from "./components/Chatbot";
 
 export default function App() {
   return (
@@ -56,6 +57,8 @@ export default function App() {
         <Route path="/login" element={<IsAnon><LoginPage /></IsAnon>} />
       </Routes>
       <Footer />
+      {/* El componente Chatbot se renderiza en todas las páginas, pero solo se mostrará si el usuario ha iniciado sesión */}
+      <Chatbot />
     </>
   );
 }

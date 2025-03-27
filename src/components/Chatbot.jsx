@@ -1,14 +1,20 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import '@n8n/chat/style.css';
 import { createChat } from '@n8n/chat';
 
-const ApiN8N = process.env.REACT_APP_API_N8N_URL
+const ApiN8N = process.env.REACT_APP_API_N8N_URL;
+
 export default function Chatbot() {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
     useEffect(() => {
-       console.log(ApiN8N);
-}, []);
+        const authToken = localStorage.getItem("authToken");
+        setIsAuthenticated(!!authToken);
+    }, []);
+
     useEffect(() => {
-        /* console.log(process.env.REACT_APP_API_N8N_URL); */
+        if (!isAuthenticated) return; 
+
         createChat({
             webhookUrl: ApiN8N,
             webhookConfig: {
@@ -19,24 +25,32 @@ export default function Chatbot() {
             mode: 'window',
             chatInputKey: 'chatInput',
             chatSessionKey: 'sessionId',
-            metadata: {},
+            metadata: {
+
+                userAuthenticated: true
+            },
             showWelcomeScreen: false,
-            defaultLanguage: 'en',
+            defaultLanguage: 'es', 
             initialMessages: [
-                'Hi there! 👋',
-                'My name is Nathan. How can I assist you today?'
+                '¡Hola! 👋',
+                'Soy tu asistente de películas y series. ¿En qué puedo ayudarte hoy?',
+                'Puedo ayudarte a encontrar información sobre películas, series, o responder preguntas sobre tu colección.'
             ],
             i18n: {
-                en: {
-                    title: 'Hi there! 👋',
-                    subtitle: "Start a chat. We're here to help you 24/7.",
+                es: {
+                    title: '¡Hola! 👋',
+                    subtitle: "Inicia una conversación. Estoy aquí para ayudarte con tus películas y series.",
                     footer: '',
-                    getStarted: 'New Conversation',
-                    inputPlaceholder: 'Type your question..',
+                    getStarted: 'Nueva Conversación',
+                    inputPlaceholder: 'Escribe tu pregunta sobre películas o series...',
                 },
             },
         });
-    }, []);
+    }, [isAuthenticated]);
 
-    return (<div></div>);
+    if (!isAuthenticated) return null;
+
+    return (
+        <div id="n8n-chat" className="fixed bottom-4 right-4 z-50"></div>
+    );
 }
