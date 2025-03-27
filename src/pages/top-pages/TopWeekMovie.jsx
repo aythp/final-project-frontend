@@ -1,15 +1,39 @@
 import React from 'react';
 import ManualCarousel from '../../components/ManualCarousel';
+import { motion } from 'framer-motion';
 
 export default function TopWeekMovie() {
   return (
-    <div className="flex flex-col min-h-screen bg-slate-600">
-      <div className="flex flex-grow">
-        <div className="flex-1">
-          <h1 className="text-3xl font-bold text-white p-6">Películas Populares de la Semana</h1>
+    <motion.div 
+      className="min-h-screen bg-gradient-to-b from-slate-800 to-slate-900"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="container mx-auto px-4 py-8">
+        <motion.div
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.1, duration: 0.5 }}
+          className="mb-8"
+        >
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
+            Películas Populares de la Semana
+          </h1>
+          <div className="h-1 w-32 bg-primary rounded-full mb-4"></div>
+          <p className="text-slate-300 text-lg">
+            Descubre las películas más populares de esta semana según las tendencias globales
+          </p>
+        </motion.div>
+        
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+        >
           <ManualCarousel mediaType="movie" timeWindow="week" />
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
