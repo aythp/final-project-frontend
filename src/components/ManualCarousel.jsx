@@ -3,6 +3,7 @@ import axios from 'axios';
 import { AuthContext } from "../context/auth.context";
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion'; 
+import { BsCheck2 } from 'react-icons/bs';
 
 export default function ManualCarousel({ mediaType, timeWindow }) {
     const navigate = useNavigate();
@@ -10,6 +11,10 @@ export default function ManualCarousel({ mediaType, timeWindow }) {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeIndex, setActiveIndex] = useState(0);
+    const [savedItems, setSavedItems] = useState({});
+    const [addingItem, setAddingItem] = useState(null);
+    const [removingItem, setRemovingItem] = useState(null);
+    const [savedItemIds, setSavedItemIds] = useState({});
     const searchRef = useRef(null);
 
     const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
@@ -41,6 +46,10 @@ export default function ManualCarousel({ mediaType, timeWindow }) {
                 });
 
                 setItems(response.data.results.slice(0, 5));
+                
+                if (isLoggedIn) {
+                    await checkSavedItems(response.data.results.slice(0, 5));
+                }
             } catch (error) {
                 console.error('Error fetching data:', error);
             } finally {
@@ -49,7 +58,50 @@ export default function ManualCarousel({ mediaType, timeWindow }) {
         };
 
         fetchData();
-    }, [mediaType, timeWindow, API_KEY]);
+    }, [mediaType, timeWindow, API_KEY, isLoggedIn]);
+    
+    const checkSavedItems = async (mediaItems) => {
+        try {
+            const authToken = localStorage.getItem("authToken");
+            if (!authToken) return;
+            
+            const endpoint = mediaType === 'movie' ? 'movies' : 'series';
+            const savedItemsObj = {};
+            const savedItemIdsObj = {};
+            
+            const response = await axios.get(
+                `${process.env.REACT_APP_SERVER_URL}/api/${endpoint}`,
+                { headers: { Authorization: `Bearer ${authToken}` } }
+            );
+            
+            const userItems = response.data;
+            console.log('User items:', userItems);
+            
+            mediaItems.forEach(item => {
+                const title = mediaType === 'movie' ? item.title : item.name;
+                const matchingItem = userItems.find(userItem => 
+                    (userItem.tmdbId && userItem.tmdbId.toString() === item.id.toString()) ||
+                    userItem.title.toLowerCase() === title.toLowerCase()
+                );
+                
+                const isSaved = !!matchingItem;
+                savedItemsObj[item.id] = isSaved;
+                
+                if (isSaved && matchingItem) {
+                    console.log(`Found saved item: ${title} with ID: ${matchingItem._id}`);
+                    savedItemIdsObj[item.id] = matchingItem._id;
+                }
+            });
+            
+            console.log('Saved items map:', savedItemsObj);
+            console.log('Saved item IDs map:', savedItemIdsObj);
+            
+            setSavedItems(savedItemsObj);
+            setSavedItemIds(savedItemIdsObj);
+        } catch (error) {
+            console.error('Error checking saved items:', error);
+        }
+    };
 
     const handleAddToList = async (item) => {
         if (!isLoggedIn) {
@@ -58,17 +110,104 @@ export default function ManualCarousel({ mediaType, timeWindow }) {
         }
     
         try {
+            setAddingItem(item.id);
             const authToken = localStorage.getItem("authToken");
             const endpoint = mediaType === 'movie' ? 'movies' : 'series';
             const query = mediaType === 'movie' ? item.title : item.name;
+            
+            console.log(`Attempting to add ${mediaType} with TMDB ID: ${item.id}`);
     
-            await axios.post(
+            const response = await axios.post(
                 `${process.env.REACT_APP_SERVER_URL}/api/${endpoint}/search`,
-                { query },
+                { 
+                    query,
+                    tmdbId: item.id 
+                },
                 { headers: { Authorization: `Bearer ${authToken}` } }
             );
+            
+            console.log('Add response:', response.data);
+            
+            
+            const savedItemId = response.data._id;
+            
+            
+            setSavedItems(prev => ({
+                ...prev,
+                [item.id]: true
+            }));
+            setSavedItemIds(prev => ({
+                ...prev,
+                [item.id]: savedItemId
+            }));
+            
+            console.log(`Successfully added ${mediaType} to list with MongoDB ID: ${savedItemId}`);
         } catch (error) {
             console.error('Error adding to list:', error);
+            console.error('Error details:', error.response?.data || 'No response data');
+        } finally {
+            setAddingItem(null);
+        }
+    };
+
+    const handleRemoveFromList = async (item) => {
+        if (!isLoggedIn) {
+            navigate('/login');
+            return;
+        }
+    
+        try {
+            setRemovingItem(item.id);
+            const authToken = localStorage.getItem("authToken");
+            const endpoint = mediaType === 'movie' ? 'movies' : 'series';
+            const savedItemId = savedItemIds[item.id];
+            
+            console.log(`Attempting to remove ${mediaType} with TMDB ID: ${item.id}`);
+            console.log(`MongoDB ID for deletion: ${savedItemId}`);
+            
+            if (!savedItemId) {
+                console.error('No saved item ID found for this item. Refreshing saved items...');
+                
+                await checkSavedItems([item]);
+                return;
+            }
+    
+            const response = await axios.delete(
+                `${process.env.REACT_APP_SERVER_URL}/api/${endpoint}/${savedItemId}`,
+                { headers: { Authorization: `Bearer ${authToken}` } }
+            );
+            
+            console.log('Delete response:', response.data);
+            
+            
+            setSavedItems(prev => ({
+                ...prev,
+                [item.id]: false
+            }));
+            setSavedItemIds(prev => {
+                const newState = { ...prev };
+                delete newState[item.id]; 
+                return newState;
+            });
+            
+            console.log(`Successfully removed ${mediaType} from list`);
+        } catch (error) {
+            console.error('Error removing from list:', error);
+            console.error('Error details:', error.response?.data || 'No response data');
+            
+            if (error.response?.status === 404) {
+                setSavedItems(prev => ({
+                    ...prev,
+                    [item.id]: false
+                }));
+                setSavedItemIds(prev => {
+                    const newState = { ...prev };
+                    delete newState[item.id];
+                    return newState;
+                });
+            }
+        } finally {
+            setRemovingItem(null);
         }
     };
 
@@ -148,13 +287,27 @@ export default function ManualCarousel({ mediaType, timeWindow }) {
                                         </div>
                                     </div>
                                     <button
-                                        onClick={() => handleAddToList(item)}
-                                        className="btn btn-primary btn-lg gap-2 hover:scale-105 transition-transform"
+                                        onClick={() => !savedItems[item.id] ? handleAddToList(item) : handleRemoveFromList(item)}
+                                        className={`btn ${savedItems[item.id] ? 'btn-error' : 'btn-primary'} btn-lg gap-2 hover:scale-105 transition-transform`}
+                                        disabled={addingItem === item.id || removingItem === item.id}
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                                        </svg>
-                                        Añadir a mi lista
+                                        {addingItem === item.id ? (
+                                            <span className="loading loading-spinner loading-xs"></span>
+                                        ) : removingItem === item.id ? (
+                                            <span className="loading loading-spinner loading-xs"></span>
+                                        ) : savedItems[item.id] ? (
+                                            <>
+                                                <BsCheck2 className="h-6 w-6" />
+                                                Eliminar de mi lista
+                                            </>
+                                        ) : (
+                                            <>
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                                </svg>
+                                                Añadir a mi lista
+                                            </>
+                                        )}
                                     </button>
                                 </motion.div>
                             </div>
