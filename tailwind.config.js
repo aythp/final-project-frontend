@@ -14,3 +14,7 @@ export const theme = {
   },
 };
 export const plugins = [require('daisyui')];
+export const daisyui = {
+  themes: ["dark"],
+  darkTheme: "dark",
+};

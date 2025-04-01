@@ -24,8 +24,14 @@ import TopHistorySeries from "./pages/top-pages/TopHistorySeries";
 import ChatbotPage from "./pages/ChatbotPage";
 import RandomPage from "./pages/RandomPage";
 import Chatbot from "./components/Chatbot";
+import { useEffect } from "react";
 
 export default function App() {
+  
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", "dark");
+  }, []);
+  
   return (
     <>
       <Navbar />
