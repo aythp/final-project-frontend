@@ -11,11 +11,11 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="relative bg-base-200" style={{ height: 'calc(100vh - 136px)' }}>
+    <div className="relative bg-base-200" style={{ height: 'calc(100vh - 100px)' }}>
       <div className="absolute inset-0 w-full h-full">
         <Carousel />
       </div>
-      <div className="absolute inset-0 bg-opacity-70 backdrop-blur-sm z-10"></div>
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm z-10"></div>
       <div className="absolute inset-0 z-20 flex items-center justify-center">
         <div className={`w-[1200px] mx-auto px-4 flex flex-col items-center transition-all duration-700 ease-out transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
           
